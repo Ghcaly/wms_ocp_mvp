@@ -66,24 +66,16 @@ class EmptySpaceRule(BaseRule):
         grouped = {}
         for ms in filtered:
             prod_codes = [p.product.CodePromax for p in ms.get_first_pallet().get_products()]
-            key = len(set(prod_codes))
+            key = len(prod_codes)
             grouped.setdefault(key, []).append(ms)
 
         if not grouped:
             return None
 
-        # choose group with highest key
-        best_key = max(grouped.keys())
-        group = grouped[best_key]
-
-        if len(group) > 1:
-            # order by different product type quantity desc and return first
-            # heuristics: choose mounted space with largest count of distinct product types
-            # ordered = sorted(group, key=lambda m: len(set([p.product.Type for p in m.get_first_pallet().get_products()])), reverse=True)
-            ordered = sorted(group, key=lambda m: m.get_first_pallet().DifferentProductTypeQuantity, reverse=True)
-            return ordered[0]
-
-        return group[0]
+        # C#: .Select(g => g.First()) then .OrderByDescending(ms => DifferentProductTypeQuantity)
+        representatives = [group[0] for group in grouped.values()]
+        ordered = sorted(representatives, key=lambda m: m.get_first_pallet().DifferentProductTypeQuantity, reverse=True)
+        return ordered[0] if ordered else None
 
     def _get_selected_mounted_product(self, mounted_space, context):
         # group products by occupation then apply tie-breakers as C#

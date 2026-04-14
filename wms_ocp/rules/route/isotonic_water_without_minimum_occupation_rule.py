@@ -8,10 +8,10 @@ from ...domain.context import Context
 
 class IsotonicWaterWithoutMinimumOccupationRule(BaseRule):
     def __init__(self, isotonic_rule=None, returnable_split_rule=None, non_layer_rule=None, returnable_split_remount_rule=None):
-        self.isotonic_rule = IsotonicWaterRule()
-        self.returnable_split_rule = ReturnableAndDisposableSplitRule()
-        self.non_layer_rule = NonLayerOnLayerPalletRule()
-        self.returnable_split_remount_rule = ReturnableAndDisposableSplitRemountRule()
+        self.isotonic_rule = isotonic_rule or IsotonicWaterRule()
+        self.returnable_split_rule = returnable_split_rule or ReturnableAndDisposableSplitRule()
+        self.non_layer_rule = non_layer_rule or NonLayerOnLayerPalletRule()
+        self.returnable_split_remount_rule = returnable_split_remount_rule or ReturnableAndDisposableSplitRemountRule()
 
     def execute(self, context: Context):
         # 1) run isotonic rule's WithoutMinOccupationValidation
@@ -61,7 +61,7 @@ class IsotonicWaterWithoutMinimumOccupationRule(BaseRule):
             print(f"Error in non_layer_on_layer_pallet_rule: {e}")
             has_layer = False
 
-        non_chopp_remaining = any(i.amount_remaining > 0 and not i.is_chopp for i in items)
+        non_chopp_remaining = any(i.amount_remaining > 0 and not i.is_chopp for i in context.get_items())
         if has_layer and non_chopp_remaining and self.non_layer_rule:
             try:
                 item_pred = lambda it: (not it.is_chopp) and (not it.is_marketplace) and (getattr(it, 'amount_remaining', 0) > 0)

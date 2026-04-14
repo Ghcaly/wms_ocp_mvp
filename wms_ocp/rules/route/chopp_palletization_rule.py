@@ -232,7 +232,7 @@ class ChoppPalletizationRule(BaseRule):
         sorted_items = sorted(items_with_same_pallet_dozen_config.items, key=lambda i: i.AmountRemaining, reverse=True)
         
         for item in sorted_items:
-            if item.AmountRemaining == 0:
+            if item.AmountRemaining <= 0:
                 continue
             
             # Calcula ocupação do item
@@ -292,7 +292,7 @@ class ChoppPalletizationRule(BaseRule):
         sorted_items = sorted(items_with_same_pallet_dozen_config.items, key=lambda i: i.AmountRemaining, reverse=True)
         
         for item in sorted_items:
-            if item.AmountRemaining == 0:
+            if item.AmountRemaining <= 0:
                 continue
             
             # Verifica se pode adicionar

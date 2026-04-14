@@ -36,9 +36,9 @@ class NonLayerOnLayerPalletRule(BaseRule):
             ItemList(context.GetItems())
             .NotMarketplace()
             .Matching(item_predicate)
-            # .NotChopp()
-            # .NotIsotonicWater()
-            # .WithAmountRemaining()
+            .NotChopp()
+            .NotIsotonicWater()
+            .WithAmountRemaining()
             .OrderedByAmountRemainingDesc()
         )
 
@@ -97,7 +97,6 @@ class NonLayerOnLayerPalletRule(BaseRule):
         filtered_items_updated = (
             ItemList(context.GetItems())
             .NotChopp()
-            .NotMarketplace()
             .NotIsotonicWater()
             .WithAmountRemaining()
             .OrderedByAmountRemainingDesc()

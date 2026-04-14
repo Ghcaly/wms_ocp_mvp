@@ -73,8 +73,8 @@ class IsotonicWaterRule(BaseRule):
 			candidate = MountedSpaceList(context.MountedSpaces).HasSpaceAndNotBlocked().WithSameType(ContainerType.DISPOSABLE).OrderByLayerOccupationAndDifference(item.Product)\
 			 .FirstOrDefault()
 
-			if candidate is not None:
-				space = candidate.Space
+			space = candidate.Space if candidate is not None else None
+			if space is not None:
 				self._add_product(context, space, item)
 
 			self._add_product_on_base_type_space(context, item, ContainerType.DISPOSABLE)
@@ -214,7 +214,7 @@ class IsotonicWaterRule(BaseRule):
 			if space1 is None or space2 is None:
 				continue
 			context.domain_operations.AddOn2Spaces(context, space1.Space, space2.Space, item)
-			if all(not c.Remount for c in space2.Containers):
+			if all((not getattr(c, 'Remount', False)) and getattr(c, 'is_pallet', False) for c in space2.Containers):
 				space2 = None
 			else:
 				space1 = None

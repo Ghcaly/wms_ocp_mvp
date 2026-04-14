@@ -59,7 +59,7 @@ class RemountSplittedRebuildPalletRule(BaseRule):
         not_palletized_quantity = ItemList(context.GetItems()).NotMarketplace().WithAmountRemaining().count()
         
         # Step 1: Run non-layer on layer rule if snapshot has layers (all not keg exclusive)
-        if snapshot.MountedSpaces.IsLayer().any() and snapshot.MountedSpaces.to_list() and all(ms.NotKegExclusive() for ms in snapshot.MountedSpaces):
+        if snapshot.MountedSpaces.IsLayer().any() and all(ms.NotKegExclusive() for ms in snapshot.MountedSpaces):
             self.non_layer_on_layer_rule.execute(
                 snapshot,
                 lambda x: x.NotChopp() and x.NotIsotonicWater() and x.HasAmountRemaining(),

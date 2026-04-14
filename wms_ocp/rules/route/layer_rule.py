@@ -29,7 +29,7 @@ class LayerRule(BaseRule):
             bays = context.domain_operations.ordered_by(context.get_not_full_spaces(), fields=["size", "number"])
 
             # for item in context.domain_operations.ordered_by(items, fields=["priority", "amount_remaining"]):
-            for item in context.domain_operations.ordered_by(items, fields=["amount_remaining"]):
+            for item in context.domain_operations.ordered_by(items, fields=["priority", "amount_remaining"]):
                 # similar_products = context.domain_operations.ordered_by(
                 #         ItemList(items).layer_code(item.product.LayerCode).isDisposable()
                 #         ,fields= [("layers_remaining", "desc")]
@@ -84,7 +84,7 @@ class LayerRule(BaseRule):
 
             quantity = ballast * pallet_settings.QuantityBallast
 
-            boxes = self.factor_converter.occupation(quantity, factor, similar, context.get_setting('OccupationAdjustmentToPreventExcessHeight'))
+            boxes = self.factor_converter.occupation(quantity, factor, pallet_settings, similar, context.get_setting('OccupationAdjustmentToPreventExcessHeight'))
 
             if space.size < current_occupation + boxes:
                 continue

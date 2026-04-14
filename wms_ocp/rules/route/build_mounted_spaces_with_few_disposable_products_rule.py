@@ -32,8 +32,8 @@ class BuildMountedSpacesWithFewDisposableProductsRule(BaseRule):
             disposables2 = sorted(disposables, key=lambda m: m.occupation)
             for space2 in [s for s in disposables2 if s is not space1]:
                 # quantity of distinct products on first and second mounted spaces
-                quantityDifferentItemsOnSpace1 = len({mp.product.code for mp in space1.get_first_pallet().get_products()})
-                quantityDifferentItemsOnSpace2 = len({mp.product.code for mp in space2.get_first_pallet().get_products()})
+                quantityDifferentItemsOnSpace1 = len({mp.product.code_promax for mp in space1.get_first_pallet().get_products()})
+                quantityDifferentItemsOnSpace2 = len({mp.product.code_promax for mp in space2.get_first_pallet().get_products()})
 
                 # choose bigger and smaller (add to bigger)
                 if space1.space.size > space2.space.size:
@@ -49,7 +49,7 @@ class BuildMountedSpacesWithFewDisposableProductsRule(BaseRule):
 
                 # select returnable mounted spaces (not keg-exclusive / returnable and above occupation threshold)
                 # Here we use available helpers on the context.mounted_spaces when present; keep semantics close to C#
-                returnable_spaces = [m for m in context.mounted_spaces if m.is_returnable(context) and m.occupation > context.get_setting('MinimumOccupationToSwitchDisposableMountedSpaces', 0)]
+                returnable_spaces = [m for m in context.mounted_spaces if m.is_returnable(context) and not m.is_keg_exclusive() and m.occupation > context.get_setting('MinimumOccupationToSwitchDisposableMountedSpaces', 0)]
 
                 # add returnable products into containers
                 self._add_returnable_products_on_container(context, mountedSpaceToAdd, mountedSpaceToRemove, returnable_spaces)

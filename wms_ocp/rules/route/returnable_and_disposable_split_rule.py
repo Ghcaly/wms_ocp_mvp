@@ -95,7 +95,7 @@ class ReturnableAndDisposableSplitRule(BaseRule):
         print(f"ReturnableAndDisposableSplitRule: moving from {source.space.number} to {target.space.number}")
 
         source_pallet = source.get_first_pallet()
-        source_mounted_products = list(source_pallet.get_products())
+        source_mounted_products = list(source_pallet.get_products().NotLayerConfigurationWithQuantityToLayer().OrderByAmountRemainingDesc())
 
         pallet_target = target.get_first_pallet()
 

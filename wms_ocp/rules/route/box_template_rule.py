@@ -38,7 +38,7 @@ class BoxTemplateRule(BaseRule):
 
         for item in items:
             for space in avaliableSpaces:
-                if item.amount_remaining == 0:
+                if item.amount_remaining <= 0:
                     print(f"O item {item.code} foi paletizado completamente")
                     break
 
@@ -61,8 +61,8 @@ class BoxTemplateRule(BaseRule):
                     continue
 
                 firstLayer = mountedSpace.get_next_layer() if mountedSpace is not None else 0
-                quantityOfLayer = item.product.get_quantity_of_layer_to_space(space.Size, quantity)
-                occupation = self._factor_converter.occupation(quantity, space.Size, item, context.get_setting('OccupationAdjustmentToPreventExcessHeight', False))
+                quantityOfLayer = item.product.get_quantity_of_layer_to_space(space.size, quantity)
+                occupation = self._factor_converter.occupation(quantity, space.size, item, context.get_setting('OccupationAdjustmentToPreventExcessHeight', False))
 
                 context.add_execution_log(f"Paletizando o item: {item.Code} na quantidade: {quantity} na baia: {space.number}/{space.sideDesc} e ocupação: {occupation}")
                 context.AddProduct(space, item, quantity, firstLayer, quantityOfLayer, occupation, item.amount_remaining)
