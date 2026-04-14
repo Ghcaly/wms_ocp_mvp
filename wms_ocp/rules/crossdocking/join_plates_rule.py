@@ -1,5 +1,6 @@
 import logging
 from ...domain.context import Context
+from ...domain.calculator_constants import CalculatorConstants
 from .cross_base_rule import CrossBaseRule
 
 
@@ -17,7 +18,7 @@ class JoinPlatesRule(CrossBaseRule):
         retries = 0
         for plate in plates:
             has_not_palletized_items = True
-            while has_not_palletized_items and (new_context.Spaces.Any() or self._join_first_maps(new_context)) and retries < 10:
+            while has_not_palletized_items and (new_context.Spaces.Any() or self._join_first_maps(new_context)) and retries < CalculatorConstants.NUMBER_OF_MAX_RETRIES:
                 self.logger.debug(f'Loop AS Rule nº {retries}')
                 new_context = self.execute_as_rules(new_context, plate)
                 has_not_palletized_items = any(x.LicensePlate == plate for x in new_context.GetItems().WithAmountRemaining())

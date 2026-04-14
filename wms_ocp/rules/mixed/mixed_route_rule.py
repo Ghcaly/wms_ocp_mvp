@@ -1,6 +1,6 @@
 import logging
 from ...domain.base_rule import BaseRule
-from ...domain.context import Context
+from ...domain.context import Context, T4RuleContext
 
 
 class MixedRouteRule(BaseRule):
@@ -45,7 +45,8 @@ class MixedRouteRule(BaseRule):
 
             old_sum_of_amount = sum(getattr(x, 'amount_remaining', 0) for x in route_order.get_items_palletizable()) if route_order else 0
 
-            if not getattr(context, 'is_t4', False):
+            # C#: if (context is not IT4RuleContext)
+            if not isinstance(context, T4RuleContext):
                 if hasattr(route_order, 'set_additional_spaces'):
                     route_order.set_additional_spaces(len(new_context.spaces))
 

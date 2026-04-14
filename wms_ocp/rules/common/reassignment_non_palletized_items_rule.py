@@ -70,13 +70,23 @@ class ReassignmentNonPalletizedItemsRule(BaseRule):
         return context
     
     def execute(self, context: Context) -> Context:
-        if context.kind == 'AS':
+        # C#: var asOrders = context.Orders.Where(x => x.Items.Any(y => !string.IsNullOrEmpty(y.Customer)))
+        as_orders = [
+            o for o in context.orders
+            if any(getattr(y, 'customer', None) not in (None, '') for y in o.items)
+        ]
+        if as_orders:
             self.debug("Itens não paletizados AS")
-            self._reassignment_non_palletized_items(context, context.orders)
+            self._reassignment_non_palletized_items(context, as_orders)
 
-        if context.kind == 'Route':
+        # C#: var routeOrders = context.Orders.Where(x => x.Items.Any(y => string.IsNullOrEmpty(y.Customer)))
+        route_orders = [
+            o for o in context.orders
+            if any(getattr(y, 'customer', None) in (None, '') for y in o.items)
+        ]
+        if route_orders:
             self.debug("Itens não paletizados Rota")
-            self._reassignment_non_palletized_items(context, context.orders)
+            self._reassignment_non_palletized_items(context, route_orders)
 
         return context
 

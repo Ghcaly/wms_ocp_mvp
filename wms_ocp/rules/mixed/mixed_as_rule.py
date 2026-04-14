@@ -10,13 +10,10 @@ class MixedASRule(BaseRule):
         self.logger = logging.getLogger(__name__)
 
     def _get_orders(self, context: Context):
-        # Alguns JSONs usam o campo 'client' em vez de 'customer' nos itens.
-        # Aceitamos qualquer um dos dois atributos para maior robustez.
         return [
             o for o in context.orders
             if any(
                 getattr(i, 'customer', None) not in (None, '')
-                or getattr(i, 'client', None) not in (None, '')
                 for i in o.items
             )
         ]

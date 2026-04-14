@@ -71,7 +71,10 @@ class MixedRemountRule(BaseRule):
                 if not context.domain_operations.can_add(context, second, first):
                     continue
 
-                context.domain_operations.change_product_full_space(context, second, first)
+                # C#: if (switchSucceeded) firstMountedSpace.RemoveContainers()
+                switch_succeeded = context.domain_operations.change_product_full_space(context, second, first)
+                if switch_succeeded and hasattr(first, 'remove_containers'):
+                    first.remove_containers()
                 return
 
     def _palletize_remount(self, context: Context) -> Context:
