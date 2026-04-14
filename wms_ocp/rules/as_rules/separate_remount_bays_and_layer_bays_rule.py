@@ -4,9 +4,11 @@ from ...domain.context import Context
 
 
 class SeparateRemountBaysAndLayerBaysRule(BaseRule):
-    def __init__(self):
+    def __init__(self, factor_converter=None, mounted_space_operations=None):
         super().__init__()
         self.logger = logging.getLogger(__name__)
+        self._factor_converter = factor_converter
+        self._mounted_space_operations = mounted_space_operations
 
     def execute(self, context: Context) -> Context:
         self.logger.debug('Iniciando execucao da regra SeparateRemountBaysAndLayerBaysRule')
@@ -43,14 +45,27 @@ class SeparateRemountBaysAndLayerBaysRule(BaseRule):
                 self.logger.debug('Nao ha mais baias vazias no caminhao')
                 break
 
-            # naive occupation check using item occupation if available
-            occupation_needed_to_move = sum(getattr(x, 'estimated_occupation', 0) for x in disposable_mounted_products)
-            if getattr(empty_space, 'size', 0) < occupation_needed_to_move:
+            # C#: _factorConverter.Occupation(x, emptySpace.Size, x.Item, ...)
+            empty_size = getattr(empty_space, 'size', getattr(empty_space, 'Size', 0))
+            if self._factor_converter:
+                occupation_needed_to_move = sum(
+                    self._factor_converter.occupation(
+                        x, empty_size,
+                        getattr(x, 'Item', getattr(x, 'item', None)),
+                        context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)
+                    )
+                    for x in disposable_mounted_products
+                )
+            else:
+                occupation_needed_to_move = sum(getattr(x, 'estimated_occupation', 0) for x in disposable_mounted_products)
+
+            if float(empty_size) < float(occupation_needed_to_move):
                 self.logger.debug('Os produtos selecionados nao cabem no espaco vazio')
                 continue
 
-            # Attempt to use mounted space operations helper
-            context.domain_operations.move_mounted_products(context, empty_space, remount, disposable_mounted_products)
+            # C#: _mountedSpaceOperations.MoveMountedProducts(...)
+            ops = self._mounted_space_operations or context.domain_operations
+            ops.move_mounted_products(context, empty_space, remount, disposable_mounted_products)
 
             # set new base product if available
             if hasattr(remount_pallet, 'products') and remount_pallet.products:
@@ -83,7 +98,16 @@ class SeparateRemountBaysAndLayerBaysRule(BaseRule):
     def _try_move_mounted_products(self, context: Context, source_mounted_space, source_mounted_products):
         used_spaces = []
         for mounted_product in list(source_mounted_products):
-            source_occupation = getattr(mounted_product, 'estimated_occupation', 0)
+            # C#: _factorConverter.Occupation(mountedProduct, sourceMountedSpace.Space.Size, mountedProduct.Item, ...)
+            source_size = getattr(getattr(source_mounted_space, 'space', source_mounted_space), 'size', 0)
+            if self._factor_converter:
+                source_occupation = self._factor_converter.occupation(
+                    mounted_product, source_size,
+                    getattr(mounted_product, 'Item', getattr(mounted_product, 'item', None)),
+                    context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)
+                )
+            else:
+                source_occupation = getattr(mounted_product, 'estimated_occupation', 0)
             target_space = None
 
             # Try same order mounted space with same type and occupation remaining
@@ -104,8 +128,9 @@ class SeparateRemountBaysAndLayerBaysRule(BaseRule):
                 self.logger.debug(f'Nao foi encontrado um palete de destino para mover o item {getattr(mounted_product.product, "code", "?")}, da baia {getattr(source_mounted_space, "number", "?")}/{getattr(source_mounted_space, "side", "?")}')
                 continue
 
-            moved_succeed = False
-            moved_succeed = context.domain_operations.move_mounted_product(context, target_space, source_mounted_space, mounted_product)
+            # C#: _mountedSpaceOperations.MoveMountedProduct(...)
+            ops = self._mounted_space_operations or context.domain_operations
+            moved_succeed = ops.move_mounted_product(context, target_space, source_mounted_space, mounted_product)
 
             if moved_succeed and target_space not in used_spaces:
                 used_spaces.append(target_space)
