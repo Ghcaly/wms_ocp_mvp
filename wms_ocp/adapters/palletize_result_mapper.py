@@ -459,6 +459,16 @@ class PalletizeResultMapper:
                     document_numbers.append(str(mn))
         document_numbers = list(dict.fromkeys([d for d in document_numbers if d]))
 
+        # Compute pallet weight from expanded items (BoxTemplate containers excluded, contents included).
+        # Mirrors legado: the Peso shown in the report is the sum of content item weights, not the
+        # physical box weights (which are only used internally for SideBalance weight balancing).
+        content_weight = sum(
+            float(it.get('GrossWeight') or 0) * int(it.get('Quantity') or 0)
+            for it in items_out
+            if it.get('GrossWeight') is not None
+        )
+        report_weight = content_weight if content_weight > 0 else (float(weight) if weight is not None else None)
+
         return {
             'Number': number,
             'Code': code,
@@ -468,7 +478,7 @@ class PalletizeResultMapper:
             'Side': side,
             'Size': float(size) if size is not None else None,
             'Occupation': float(occupation) if occupation is not None else None,
-            'Weight': float(weight) if weight is not None else None,
+            'Weight': report_weight,
             'IsClosed': is_closed,
             'IsPalletized': is_palletized,
             'Items': items_out,

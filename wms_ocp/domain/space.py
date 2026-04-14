@@ -1,3 +1,4 @@
+from __future__ import annotations
 from decimal import Decimal
 from typing import Optional, Any
 
@@ -150,19 +151,21 @@ class Space:
     
     def IsDriverSide(self) -> bool:
         """Check if this space is on the driver side (C# style)"""
-        if str(self.Side).strip().isdigit():
-            return chr(int(str(self.Side).strip())).upper() in ("D", "M")
-        return self.Side == "Driver"
-    
+        side = str(self.Side).strip()
+        if side.isdigit():
+            return chr(int(side)).upper() in ("D", "M")
+        return side.upper() in ("M", "D", "DRIVER", "MOTORISTA")
+
     def is_driver_side(self) -> bool:
         """Check if this space is on the driver side (Python style)"""
         return self.IsDriverSide()
-    
+
     def IsHelperSide(self) -> bool:
         """Check if this space is on the helper side (C# style)"""
-        if str(self.Side).strip().isdigit():
-            return chr(int(str(self.Side).strip())).upper() in ("A", "H")
-        return self.Side == "Helper"
+        side = str(self.Side).strip()
+        if side.isdigit():
+            return chr(int(side)).upper() in ("A", "H")
+        return side.upper() in ("A", "H", "HELPER", "AJUDANTE")
     
     def is_helper_side(self) -> bool:
         """Check if this space is on the helper side (Python style)"""

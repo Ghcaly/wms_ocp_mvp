@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List, Optional, Any
 from decimal import Decimal
 
@@ -309,20 +310,25 @@ class Product:
         Get factor by size. Raises exception if not found.
         Port of C# GetFactor method.
         """
-        factor = None
+        try:
+            size_int = int(size)
+        except (TypeError, ValueError):
+            size_int = None
+
         for f in self.Factors:
-            # Compara considerando conversão de tipo (str vs int)
+            if size_int is not None:
+                try:
+                    if int(f.Size) == size_int:
+                        return f
+                except (TypeError, ValueError):
+                    pass
             if f.Size == size or str(f.Size) == str(size):
-                factor = f
-                break
-        
-        if factor is None:
-            raise ValueError(
-                f"Nao foi encontrado o fator de tamanho {size} para o item {self.CodePromax}. "
-                f"Nome {self.Name}. Code: {self.Code}."
-            )
-        
-        return factor
+                return f
+
+        raise ValueError(
+            f"Nao foi encontrado o fator de tamanho {size} para o item {self.CodePromax}. "
+            f"Nome {self.Name}. Code: {self.Code}."
+        )
 
     # pythonic alias
     def get_factor(self, size: Any) -> Any:

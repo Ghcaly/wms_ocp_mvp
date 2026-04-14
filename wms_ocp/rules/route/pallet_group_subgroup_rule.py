@@ -64,10 +64,12 @@ class PalletGroupSubGroupRule(BaseRule):
                 continue
 
             for size_node in list(space_size_chains()):
-                # Instead of precomputing factor dicts here (eager),
-                # pass the raw items list to calculate_by_size and compute
-                # the factor dicts at enumeration time (deferred, like C# Select).
-                self.calculate_by_size(context, item, list(items_same), size_node, spaces)
+                # Pre-calculate factor dicts for all items (mirrors C# Select before CalculateBySize)
+                items_with_factors = [
+                    self.calculate_factor_by_space(it, size_node.Current, context.get_setting('OccupationAdjustmentToPreventExcessHeight'))
+                    for it in items_same
+                ]
+                self.calculate_by_size(context, item, items_with_factors, size_node, spaces)
 
     def calculate_factor_by_space(self, item, size_current, calculate_additional_occupation):
         factor = item.Product.GetFactor(size_current)
@@ -82,8 +84,9 @@ class PalletGroupSubGroupRule(BaseRule):
         return result
 
     def calculate_by_size(self, context, item, items_same_group_and_subgroup, size_node, spaces):
+        # items_same_group_and_subgroup is already a list of factor dicts (pre-calculated)
         size_value = size_node.Current
-        spaces_with_current_size = [s for s in spaces if getattr(s, 'Size', getattr(s, 'size', None)) == size_value]
+        spaces_with_current_size = [s for s in spaces if int(getattr(s, 'Size', getattr(s, 'size', 0)) or 0) == int(size_value)]
         for space in spaces_with_current_size:
             mounted_space = context.GetMountedSpace(space)
 
@@ -96,15 +99,8 @@ class PalletGroupSubGroupRule(BaseRule):
             current_occupation = mounted_space.Occupation if mounted_space is not None else 0
             free_occupation = int(size_value) - int(current_occupation)
 
-            # Generate subsequences of raw items first (deferred calculation).
-            sequences_of_items = list(SubsequenceGenerator(limit=30000).subsequences(items_same_group_and_subgroup))
-
-            # Map each subsequence of items into subsequence of dicts (calculate factors now),
-            # so boxes_quantity is computed at enumeration time using the current item.AmountRemaining.
-            sequences = [
-                [ self.calculate_factor_by_space(it, size_value, context.get_setting('OccupationAdjustmentToPreventExcessHeight')) for it in seq_items ]
-                for seq_items in sequences_of_items
-            ]
+            # Generate subsequences of pre-calculated factor dicts (mirrors C# Subsequences())
+            sequences = list(SubsequenceGenerator(limit=30000).subsequences(items_same_group_and_subgroup))
 
             quantity_to_remaining = (
                 self.get_quantity_to_remaining_space(mounted_space, space, item, context)
@@ -112,17 +108,13 @@ class PalletGroupSubGroupRule(BaseRule):
                 else 0
             )
 
-            filtered_sequences = list(
-                seq
-                for seq in sequences
+            filtered_sequences = [
+                seq for seq in sequences
                 if (
                     mounted_space is None
-                    or (
-                        quantity_to_remaining > 0
-                        and sum(x["boxes_quantity"] for x in seq) <= free_occupation
-                    )
+                    or (quantity_to_remaining > 0 and sum(x["boxes_quantity"] for x in seq) <= free_occupation)
                 )
-            )
+            ]
 
             sequences = self.calculate_minimum_occupation_percentage(size_value, filtered_sequences, context)
             if not any(sequences):
@@ -157,11 +149,11 @@ class PalletGroupSubGroupRule(BaseRule):
     def next_occupation_percentage_is_bigger_than_current(self, size_chain, ordered_sequences):
         current_occupation_percentage = (
             sum(x['boxes_quantity'] for x in ordered_sequences) * 100
-        ) // size_chain.Current
+        ) / size_chain.Current
 
         next_occupation_percentage = (
             sum(x['boxes_quantity'] for x in ordered_sequences) * 100
-        ) // size_chain.Next
+        ) / size_chain.Next
 
         # return False
         return next_occupation_percentage >= current_occupation_percentage

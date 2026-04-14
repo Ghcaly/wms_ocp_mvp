@@ -243,34 +243,6 @@ class NonPalletizedProductsRule(BaseRule):
         #     ms.Occupation
         # ))
 
-        filtered = [
-            ms for ms in mounted_spaces
-            if any(
-                mp.Product.PackingGroup.GroupCode == item.Product.PackingGroup.GroupCode
-                for c in ms.Containers
-                for mp in c.Products
-            )
-        ]
-
-        filtered = MountedSpaceList(filtered)\
-            .WithSameTypes(*container_types)\
-            .ToList()
-
-        filtered.sort(
-            key=lambda ms: (
-                self._difference(
-                    next(
-                        (c for c in ms.Containers
-                        if c.ProductBase.ContainerType in container_types),
-                        None
-                    ),
-                    item.Product
-                ),
-                ms.Occupation
-            )
-        )
-
-
         filtered = MountedSpaceList(mounted_spaces).FilterByGroupCodeAny(item.Product)\
             .WithSameTypes(*container_types).OrderByDifferenceAndOccupation(item.Product)\
             .ToList()

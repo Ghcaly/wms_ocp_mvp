@@ -478,11 +478,9 @@ class FactorConverter:
         if total_area_ballast is None or total_area_unit is None:
             return Decimal(0)
 
-        # comparator constant from C# not present in Python port: assume comparator = total_area_ballast
-        try:
-            comparator = float(getattr(product, 'comparator_item_total_area_occupied_by_ballast', 0))
-        except Exception:
-            comparator = 0.0
+        # comparator constant from C# CalculatorConstants.ComparatorItemTotalAreaOccupiedByBallast = 35.01 * 51.20 * 7
+        from .calculator_constants import CalculatorConstants
+        comparator = float(CalculatorConstants.ComparatorItemTotalAreaOccupiedByBallast)
 
         try:
             diff = (comparator - float(total_area_ballast)) / float(ballast_qty)

@@ -142,9 +142,9 @@ class ChoppPalletizationRule(BaseRule):
         
         for items_with_same_pallet_dozen_config in sorted_groups:
             context.add_execution_log(f"Processando agrupamento palete dúzia {items_with_same_pallet_dozen_config.quantity_dozen}")
-            
-            # Ordena espaços vazios por número decrescente
-            for empty_space in sorted(context.spaces, key=lambda s: s.Number, reverse=True):
+
+            # Ordena espaços vazios por número decrescente, depois Side DESC (M=77 antes de A=65)
+            for empty_space in sorted(context.spaces, key=lambda s: (-getattr(s, 'Number', 0), int(str(getattr(s, 'Side', 65) or 65).strip() or 65))):
                 self._process_closed_chopp_palletization(context, items_with_same_pallet_dozen_config, empty_space)
 
     def _palletization_chopp_that_more_items_with_same_liter_into_empty_spaces(self, context, list_of_items_with_same_pallet_dozen_config):
@@ -152,7 +152,7 @@ class ChoppPalletizationRule(BaseRule):
         Tenta adicionar juntos chopes de mesma litragem que caibam na baia vazia.
         Usa subsequências para encontrar melhor combinação.
         """
-        for empty_space in sorted(context.spaces, key=lambda s: s.Number, reverse=True):
+        for empty_space in sorted(context.spaces, key=lambda s: (-getattr(s, 'Number', 0), int(str(getattr(s, 'Side', 65) or 65).strip() or 65))):
             print(f"Iniciando tentativa de adicionar juntos os chopes de mesma litragem que caibam na baia {empty_space.Number} vazia")
             
             # Gera subsequências e filtra as que cabem no espaço
@@ -182,7 +182,7 @@ class ChoppPalletizationRule(BaseRule):
         )
         
         for items_with_same_pallet_dozen_config in sorted_groups:
-            for empty_space in sorted(context.spaces, key=lambda s: s.Number, reverse=True):
+            for empty_space in sorted(context.spaces, key=lambda s: (-getattr(s, 'Number', 0), int(str(getattr(s, 'Side', 65) or 65).strip() or 65))):
                 print(f"Iniciando tentativa de adicionar os chopes restantes na baia {empty_space.Number} vazia")
                 self._process_chopp_palletization(context, items_with_same_pallet_dozen_config, empty_space)
 

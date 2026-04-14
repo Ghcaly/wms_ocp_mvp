@@ -51,10 +51,40 @@ class RuleChain:
         """
         self.logger.info(f"Executando cadeia '{self.name}' com {len(self.rules)} regras")
         
+        def _ma_summary(ctx):
+            try:
+                from ..domain.mounted_space_list import MountedSpaceList
+                ms = getattr(ctx, 'mounted_spaces', None) or getattr(ctx, 'MountedSpaces', [])
+                driver = sum(x.weight for x in MountedSpaceList(ms).DriverSide())
+                helper = sum(x.weight for x in MountedSpaceList(ms).HelperSide())
+                total = driver + helper
+                pct = driver * 100 / total if total else 0
+                return f"M={driver:.2f} ({pct:.2f}%)  A={helper:.2f} ({100-pct:.2f}%)"
+            except Exception as e:
+                return f"(erro ao calcular M/A: {e})"
+
+        def _bays_summary(ctx):
+            try:
+                ms = getattr(ctx, 'mounted_spaces', None) or getattr(ctx, 'MountedSpaces', [])
+                lines = []
+                for space in sorted(ms, key=lambda s: (getattr(s.space, 'number', 0), getattr(s.space, 'side', 0))):
+                    sp = space.space
+                    side = getattr(getattr(sp, 'sideDesc', None), 'name', None) or getattr(sp, 'side', '?')
+                    num = getattr(sp, 'number', '?')
+                    w = getattr(space, 'weight', 0)
+                    codes = []
+                    for c in getattr(space, 'containers', []):
+                        for p in getattr(c, 'products', []):
+                            codes.append(str(getattr(p, 'Code', getattr(p, 'code', '?'))))
+                    lines.append(f"  baia {num}/{side}: w={w:.2f} codes={codes}")
+                return "\n".join(lines)
+            except Exception as e:
+                return f"  (erro bays_summary: {e})"
+
         for i, rule in enumerate(self.rules):
             rule_name = rule.__class__.__name__
             self.logger.info(f"Executando regra {i+1}/{len(self.rules)}: {rule_name}")
-            
+
             try:
                 # push a node into the hierarchical execution tree
                 executed = False
@@ -63,12 +93,18 @@ class RuleChain:
                 if self.run_should_execute(rule, context, item_predicate, mounted_space_predicate):
                     try:
                         executed=True
+                        _before = _ma_summary(context)
 
                         try:
-                            rule.execute(context)                
-                            # self.mounted_spaces_to_dataframe(context.MountedSpaces, Path(f"./{self.name}_after_{rule_name}_{i+1}.xlsx"))
+                            rule.execute(context)
+                            _after = _ma_summary(context)
+                            print(f"[MA] {self.name} | {rule_name}: {_before}  →  {_after}")
+                            print(f"[BAYS] {rule_name}:\n{_bays_summary(context)}")
                         except Exception as e:
+                            import traceback as _tb
                             self.logger.error(f"Erro ao executar regra {rule_name}: {e}")
+                            print(f"[ERR] {rule_name}: {e}")
+                            _tb.print_exc()
         
                         self.logger.info(f"Regra {rule_name} executada com sucesso")
                         logger.log(f"Regra {rule_name} executada com sucesso")

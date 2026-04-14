@@ -202,7 +202,7 @@ class DomainOperations:
             maxGroups = self.get_max_groups(context)
             currentGroups = set(g for cont in (mountedSpaceToAdd.Containers if mountedSpaceToAdd is not None else []) for g in (p.Product.PackingGroup.GroupCode for p in cont.Products))
 
-            if not all(any(itm['Item'].Product.CanBeAssociated(g) for itm in items) for g in currentGroups):
+            if not all(all(itm['Item'].Product.CanBeAssociated(g) for itm in items) for g in currentGroups):
                 self._write_log(f"NaoMover - GRUPO SEM ASSOCIACAO - Nao foi possivel mover os Itens de {mountedSpaceToRemoveItems.Space.Side}/{mountedSpaceToRemoveItems.Space.Number} para {(mountedSpaceToAdd.Space.Side+'/'+str(mountedSpaceToAdd.Space.Number)) if mountedSpaceToAdd is not None else 'DESTINO_VAZIO'}")
                 return False
 
@@ -993,8 +993,11 @@ class DomainOperations:
 
         def get_value(x, field):
             if isinstance(x, dict):
-                return x.get(field)
-            return getattr(x, field, None)
+                v = x.get(field)
+            else:
+                v = getattr(x, field, None)
+            # None cannot be compared in Python sort; treat as 0
+            return v if v is not None else 0
 
         # Normaliza os campos para tuplas (campo, ordem)
         normalized_fields = []
@@ -1081,7 +1084,7 @@ class DomainOperations:
         
         return True
 
-    @dispatch(Any, Any)
+    @dispatch(object, object)
     def switch_spaces(self, spaceDto1:Any, spaceDto2:Any):
         """SwitchSpaces(SpaceWithMountedSpaceDto, SpaceWithMountedSpaceDto)
 
@@ -1115,15 +1118,15 @@ class DomainOperations:
     def switch_spaces(self, context:object, spaceDto1:object, spaceDto2:object):
         """SwitchSpaces(context, SpaceWithMountedSpaceDto, SpaceWithMountedSpaceDto)
 
-        Port of C# behaviour: when a DTO has no MountedSpace, call context.AddSpace
-        for the incoming space and context.RemoveSpace for the outgoing one,
-        matching the logic in MountedSpaceOperations.SwitchSpaces(context,...).
+        Port of C# MountedSpaceOperations.SwitchSpaces(context, dto1, dto2):
+        if a DTO has a MountedSpace, call SetSpace on it; otherwise use
+        context.AddMountedSpaceFromSpace / context.RemoveSpace for empty bays.
         """
         auxiliary_space = getattr(spaceDto1, 'Space', None)
 
-        if getattr(spaceDto1, 'Space', None) is not None:
+        if getattr(spaceDto1, 'MountedSpace', None) is not None:
             try:
-                spaceDto1.Space = spaceDto2.Space
+                spaceDto1.MountedSpace.SetSpace(spaceDto2.Space)
             except Exception:
                 try:
                     spaceDto1.MountedSpace.Space = spaceDto2.Space
@@ -1131,16 +1134,16 @@ class DomainOperations:
                     setattr(spaceDto1.MountedSpace, 'Space', spaceDto2.Space)
         else:
             try:
-                if hasattr(context, 'AddSpace'):
-                    context.AddSpace(spaceDto2.Space)
+                if hasattr(context, 'AddMountedSpaceFromSpace'):
+                    context.AddMountedSpaceFromSpace(spaceDto2.Space)
                 if hasattr(context, 'RemoveSpace'):
                     context.RemoveSpace(spaceDto1.Space)
             except Exception:
                 pass
 
-        if getattr(spaceDto2, 'Space', None) is not None:
+        if getattr(spaceDto2, 'MountedSpace', None) is not None:
             try:
-                spaceDto2.Space = auxiliary_space
+                spaceDto2.MountedSpace.SetSpace(auxiliary_space)
             except Exception:
                 try:
                     spaceDto2.MountedSpace.Space = auxiliary_space
@@ -1148,8 +1151,8 @@ class DomainOperations:
                     setattr(spaceDto2.MountedSpace, 'Space', auxiliary_space)
         else:
             try:
-                if hasattr(context, 'AddSpace'):
-                    context.AddSpace(auxiliary_space)
+                if hasattr(context, 'AddMountedSpaceFromSpace'):
+                    context.AddMountedSpaceFromSpace(auxiliary_space)
                 if hasattr(context, 'RemoveSpace'):
                     context.RemoveSpace(spaceDto2.Space)
             except Exception:

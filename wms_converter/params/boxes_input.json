@@ -1,0 +1,18 @@
+{
+    "1": {
+        "box_slot_diameter": 10.392304,
+        "box_slots": 9,
+        "box_type": "garrafeira",
+        "height": 0,
+        "length": 0,
+        "width": 0
+    },
+    "2": {
+        "box_slot_diameter": 0,
+        "box_slots": 0,
+        "box_type": "caixa",
+        "height": 34,
+        "length": 40,
+        "width": 58
+    }
+}

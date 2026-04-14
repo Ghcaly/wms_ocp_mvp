@@ -1,3 +1,4 @@
+from __future__ import annotations
 from enum import IntEnum
 from dataclasses import dataclass, field, asdict
 from typing import Optional, List, Iterable, Dict, Any
@@ -163,70 +164,96 @@ def IntegerRuleConfigurationTypes() -> List[RuleConfigurationType]:
     ]
 
 
-def load_rule_configurations_from_csv(csv_path: Path, filter_by_warehouse_unb_code: Optional[str] = None) -> List[RuleConfiguration]:
+def load_rule_configurations_from_csv(csv_path: Path, filter_by_warehouse_unb_code: Optional[str] = None, map_type: Optional[int] = None) -> List[RuleConfiguration]:
     """Load and map CSV rows to RuleConfiguration objects.
     CSV expected with semicolon ';' delimiter and header:
     Id;WarehouseId;WarehouseUnbCode;WarehouseName;MapType;Type;Value;GenericValue
+
+    When map_type is provided (e.g. 1 for Route), rows with that specific MapType take
+    precedence over MapType=0 (global defaults): we load both and the specific one wins.
+    When map_type is None, only MapType=0 is loaded (legacy behaviour).
     """
-    configs: List[RuleConfiguration] = []
+    # Load all matching rows (MapType 0 and specific), keyed by Type so specific overrides global
+    rows_by_type: Dict[int, Any] = {}  # type_int -> row dict
     with csv_path.open(newline='', encoding='utf-8') as fh:
         reader = csv.DictReader(fh, delimiter=';')
         for row in reader:
-            # optional filter
             if filter_by_warehouse_unb_code:
                 if (row.get("WarehouseUnbCode") or "").strip() != filter_by_warehouse_unb_code:
                     continue
-            
-            if row.get("MapType")!=0 and row.get("MapType")!='0':
-                continue
 
-            # parse type safely (int -> enum)
             try:
-                type_val = int(row.get("Type") or 0)
-                try:
-                    rtype = RuleConfigurationType(type_val)
-                except ValueError:
-                    # unknown numeric value: fallback to closest name or default
-                    rtype = RuleConfigurationType.OrderPalletByPackageCodeOccupation
+                row_map_type = int(row.get("MapType") or 0)
             except Exception:
-                rtype = RuleConfigurationType.OrderPalletByPackageCodeOccupation
+                row_map_type = 0
 
-            # parse booleans and ints
-            try:
-                wid = int(row.get("WarehouseId")) if row.get("WarehouseId") else None
-            except Exception:
-                wid = None
-            try:
-                mid = int(row.get("MapType")) if row.get("MapType") else None
-            except Exception:
-                mid = None
-
-            # IMPORTANT: treat empty Value as None (nullable), matching C#'s bool? semantics
-            valraw = (row.get("GenericValue") or "").strip()
-            parsed_value: Optional[bool]
-            if valraw == "":
-                parsed_value = None
+            if map_type is not None:
+                # Accept MapType=0 (global) and the specific MapType; specific wins
+                if row_map_type not in (0, map_type):
+                    continue
             else:
-                vl = valraw.lower()
-                if vl in ("true", "yes", "y"):
-                    parsed_value = True
-                elif vl in ("false", "no", "n"):
-                    parsed_value = False
-                else:
-                    parsed_value = vl
+                # Legacy: only MapType=0
+                if row_map_type != 0:
+                    continue
 
-            cfg = RuleConfiguration(
-                id=int(row.get("Id")) if row.get("Id") else None,
-                warehouse_id=wid,
-                warehouse_unb_code=(row.get("WarehouseUnbCode") or "").strip() or None,
-                warehouse_name=(row.get("WarehouseName") or "").strip() or None,
-                map_type=mid,
-                type=rtype,
-                value=parsed_value,
-                generic_value=(row.get("GenericValue") or "").strip() or None,
-                extra={k: v for k, v in row.items() if k not in ("Id", "WarehouseId", "WarehouseUnbCode", "WarehouseName", "MapType", "Type", "Value", "GenericValue")}
-            )
-            configs.append(cfg)
+            try:
+                type_int = int(row.get("Type") or 0)
+            except Exception:
+                type_int = 0
+
+            # Specific MapType overwrites global (MapType=0) for the same Type
+            if row_map_type == 0 and type_int in rows_by_type:
+                continue  # already have a more-specific row
+            rows_by_type[type_int] = row
+
+    configs: List[RuleConfiguration] = []
+    for row in rows_by_type.values():
+        # parse type safely (int -> enum)
+        try:
+            type_val = int(row.get("Type") or 0)
+            try:
+                rtype = RuleConfigurationType(type_val)
+            except ValueError:
+                rtype = RuleConfigurationType.OrderPalletByPackageCodeOccupation
+        except Exception:
+            rtype = RuleConfigurationType.OrderPalletByPackageCodeOccupation
+
+        # parse booleans and ints
+        try:
+            wid = int(row.get("WarehouseId")) if row.get("WarehouseId") else None
+        except Exception:
+            wid = None
+        try:
+            mid = int(row.get("MapType")) if row.get("MapType") else None
+        except Exception:
+            mid = None
+
+        # IMPORTANT: treat empty Value as None (nullable), matching C#'s bool? semantics
+        valraw = (row.get("GenericValue") or "").strip()
+        parsed_value: Optional[bool]
+        if valraw == "":
+            parsed_value = None
+        else:
+            vl = valraw.lower()
+            if vl in ("true", "yes", "y"):
+                parsed_value = True
+            elif vl in ("false", "no", "n"):
+                parsed_value = False
+            else:
+                parsed_value = vl
+
+        cfg = RuleConfiguration(
+            id=int(row.get("Id")) if row.get("Id") else None,
+            warehouse_id=wid,
+            warehouse_unb_code=(row.get("WarehouseUnbCode") or "").strip() or None,
+            warehouse_name=(row.get("WarehouseName") or "").strip() or None,
+            map_type=mid,
+            type=rtype,
+            value=parsed_value,
+            generic_value=(row.get("GenericValue") or "").strip() or None,
+            extra={k: v for k, v in row.items() if k not in ("Id", "WarehouseId", "WarehouseUnbCode", "WarehouseName", "MapType", "Type", "Value", "GenericValue")}
+        )
+        configs.append(cfg)
     return configs
 
 def _pascal_to_camel(name: str) -> str:
@@ -267,17 +294,19 @@ _SETTING_NAME_OVERRIDES = {
 }
 
 
-def build_settings_for_unb_code(warehouse_unb_code: str, csv_path: Path = None) -> Dict[str, Any]:
+def build_settings_for_unb_code(warehouse_unb_code: str, csv_path: Path = None, map_type: Optional[int] = None) -> Dict[str, Any]:
     """
     Carrega `csv_path`, filtra por `warehouse_unb_code` e monta um dict `Settings`.
     - Booleans -> Python bool
     - Integers -> int
     - Generic string values preserved for string types
+
+    map_type: when provided (e.g. 1=Route, 2=AS), MapType-specific rows override MapType=0 globals.
     """
     if not csv_path:
         csv_path = Path(__file__).parent.parent / 'database' / 'ruleconfiguration_12012026.csv'
 
-    configs = load_rule_configurations_from_csv(csv_path, filter_by_warehouse_unb_code=warehouse_unb_code)
+    configs = load_rule_configurations_from_csv(csv_path, filter_by_warehouse_unb_code=warehouse_unb_code, map_type=map_type)
     settings: Dict[str, Any] = {}
 
     for cfg in configs:

@@ -1,3 +1,4 @@
+from __future__ import annotations
 from copy import deepcopy
 from datetime import datetime
 import json
@@ -222,7 +223,8 @@ class Context:
         # Combine with unused spaces
         all_spaces = list(self._spaces) + empty_mounted_spaces
         
-        # Sort by Number then by IsDriverSide (C# behavior)
+        # Sort by Number ASC, then A (Helper) before M (Driver) for same bay number.
+        # IsDriverSide() = True for M, False for A → (Number, IsDriverSide) puts A before M.
         return sorted(all_spaces, key=lambda x: (x.Number, x.IsDriverSide()))
 
     @Spaces.setter
@@ -2568,7 +2570,7 @@ class Context:
     #  MERGE IN-PLACE DE ORDERS NO CONTEXT (mutação direta)
     # ============================================================
 
-    def merge_orders_in_place(self, marketplace_created_itens, marketplace_code_itens) -> Order:
+    def merge_orders_in_place(self, marketplace_created_itens=None, marketplace_code_itens=None) -> Order:
         """
         Merge todas as orders do context._orders em uma única order.
         Substitui diretamente context._orders por uma lista com apenas a order consolidada.
@@ -2576,6 +2578,10 @@ class Context:
         """
         # guarda backup caso precise reverter
         self._orders_backup = self._orders.copy()
+        if marketplace_created_itens is None:
+            marketplace_created_itens = []
+        if marketplace_code_itens is None:
+            marketplace_code_itens = set()
 
         all_items = []
 

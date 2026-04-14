@@ -29,7 +29,7 @@ class LayerRule(BaseRule):
             bays = context.domain_operations.ordered_by(context.get_not_full_spaces(), fields=["size", "number"])
 
             # for item in context.domain_operations.ordered_by(items, fields=["priority", "amount_remaining"]):
-            for item in context.domain_operations.ordered_by(items, fields=["amount_remaining"]):
+            for item in context.domain_operations.ordered_by(items, fields=["priority", "amount_remaining"]):
                 # similar_products = context.domain_operations.ordered_by(
                 #         ItemList(items).layer_code(item.product.LayerCode).isDisposable()
                 #         ,fields= [("layers_remaining", "desc")]
@@ -89,7 +89,7 @@ class LayerRule(BaseRule):
             if space.size < current_occupation + boxes:
                 continue
 
-            if mounted_bay is None or not context.domain_operations.can_add_basic(context, mounted_bay, similar):
+            if not context.domain_operations.can_add_basic(context, mounted_bay, similar):
                 continue
 
             if self._next_space_size_has_free_space(bays, size, similar, ballast, boxes, context.get_setting('OccupationAdjustmentToPreventExcessHeight')):
@@ -110,8 +110,8 @@ class LayerRule(BaseRule):
         factor_of_next = similar_product.Product.get_factor(size['next'])
         quantity_of_next = int(math.floor(self.factor_converter.quantity_per_factor(size['next'], similar_product.amount_remaining, factor_of_next, similar_product, calculate_additional_occupation)))
 
-        ballast_of_next = int(math.floor(quantity_of_next / pallet_setting.quantity_ballast))
-        quantity_of_next = ballast_of_next * pallet_setting.quantity_ballast
+        ballast_of_next = int(math.floor(quantity_of_next / pallet_setting.QuantityBallast))
+        quantity_of_next = ballast_of_next * pallet_setting.QuantityBallast
 
         boxes_of_next = self.factor_converter.occupation(quantity_of_next, factor_of_next, pallet_setting, similar_product, calculate_additional_occupation)
         boxes_occupation_of_next = boxes_of_next * 100 / size['next']

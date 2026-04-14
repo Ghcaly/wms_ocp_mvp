@@ -37,10 +37,10 @@ class SafeSideRule(BaseRule):
             context.add_execution_log('Regra desativada, nao sera executada')
             return False
 
-        # skip crossdock / as / mixed contexts
-        if isinstance(context, tuple()):
-            # placeholder - in C# interfaces are used; we call as in C# per instruction
-            pass
+        # skip crossdock / as / mixed contexts (mirrors C# SafeSideRule.ShouldExecute)
+        if getattr(context, '_kind', getattr(context, 'Kind', '')) in ('AS', 'CrossDocking', 'Mixed'):
+            context.add_execution_log(f'Mapa {context.MapNumber}, tipo {context.Kind} nao executa regra de lado seguro')
+            return False
 
         if (len(context.get_all_spaces())) <= CalculatorConstants.SAFE_SIDE_RULE_MIN_TRUCK_BAYS:
             context.add_execution_log(f'Mapa {context.MapNumber}, O veiculo deve ter mais de {CalculatorConstants.SAFE_SIDE_RULE_MIN_TRUCK_BAYS} baias')

@@ -1350,6 +1350,8 @@ class PalletizingProcessor:
         except Exception:
             resultado = logger.save()
 
+        return result
+
 if __name__ == "__main__":
     #python -m rules.run_rules_palletizing
     paletizador = PalletizingProcessor(debug_enabled=True)

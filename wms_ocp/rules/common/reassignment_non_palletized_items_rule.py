@@ -47,36 +47,23 @@ class ReassignmentNonPalletizedItemsRule(BaseRule):
 
         return True
 
-    def execute_old(self, context: Context) -> Context:
+    def execute(self, context: Context) -> Context:
+        # Mirrors C#: detect AS vs Route orders by examining Customer field
         as_orders = [
             o for o in context.orders
             if any(y.customer is not None and y.customer.strip() != "" for y in o.items)
         ]
-        # as_orders = [o for o in context.Orders if any(i.Customer and getattr(i, "AmountRemaining", 0) > 0 for i in o.Items)]
         if as_orders:
             self.debug("Itens não paletizados AS")
             self._reassignment_non_palletized_items(context, as_orders)
 
-        # Route orders (no customer)
         route_orders = [
             o for o in context.orders
-            if any(y.customer is None or y.customer == "" for y in o.items)
+            if any(y.customer is None or y.customer.strip() == "" for y in o.items)
         ]
-        
         if route_orders:
             self.debug("Itens não paletizados Rota")
             self._reassignment_non_palletized_items(context, route_orders)
-
-        return context
-    
-    def execute(self, context: Context) -> Context:
-        if context.kind == 'AS':
-            self.debug("Itens não paletizados AS")
-            self._reassignment_non_palletized_items(context, context.orders)
-
-        if context.kind == 'Route':
-            self.debug("Itens não paletizados Rota")
-            self._reassignment_non_palletized_items(context, context.orders)
 
         return context
 

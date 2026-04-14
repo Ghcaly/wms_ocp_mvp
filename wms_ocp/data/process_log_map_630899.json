@@ -1,0 +1,1129 @@
+{
+  "start_date": "2026-04-14T00:53:19.072494",
+  "end_date": "2026-04-14T00:53:22.802636",
+  "steps": [
+    {
+      "sequence": 1,
+      "rule": "ComplexGroupLoadRule",
+      "type": "principal_route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.346684",
+      "end_date": "2026-04-14T00:53:21.349017",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Cliente: 7264, não atende a configuração de quantidade mínima de skus de 30, SKUS 4",
+        "Cliente: 19360, não atende a configuração de quantidade mínima de skus de 30, SKUS 5",
+        "Cliente: 19491, não atende a configuração de quantidade mínima de skus de 30, SKUS 7",
+        "Cliente: 34499, não atende a configuração de quantidade mínima de skus de 30, SKUS 1",
+        "Cliente: 549, não atende a configuração de quantidade mínima de skus de 30, SKUS 11",
+        "Cliente: 3686, não atende a configuração de quantidade mínima de skus de 30, SKUS 3",
+        "Cliente: 17382, não atende a configuração de quantidade mínima de skus de 30, SKUS 9",
+        "Cliente: 47816, não atende a configuração de quantidade mínima de skus de 30, SKUS 4",
+        "Cliente: 41507, não atende a configuração de quantidade mínima de skus de 30, SKUS 3",
+        "Cliente: 48650, não atende a configuração de quantidade mínima de skus de 30, SKUS 3",
+        "Cliente: 3173, não atende a configuração de quantidade mínima de skus de 30, SKUS 3",
+        "Cliente: 1981, não atende a configuração de quantidade mínima de skus de 30, SKUS 8",
+        "Cliente: 98685, não atende a configuração de quantidade mínima de skus de 30, SKUS 9",
+        "Cliente: 42268, não atende a configuração de quantidade mínima de skus de 30, SKUS 3",
+        "Cliente: 46810, não atende a configuração de quantidade mínima de skus de 30, SKUS 4",
+        "Cliente: 8732, não atende a configuração de quantidade mínima de skus de 30, SKUS 12",
+        "Cliente: 20477, não atende a configuração de quantidade mínima de skus de 30, SKUS 15",
+        "Cliente: 33340, não atende a configuração de quantidade mínima de skus de 30, SKUS 7",
+        "Cliente complexo: False, mapa ",
+        "Regra ComplexGroupLoadRule não executada!"
+      ],
+      "raw": {
+        "Rule": "ComplexGroupLoadRule",
+        "Logs": [
+          "Cliente: 7264, não atende a configuração de quantidade mínima de skus de 30, SKUS 4",
+          "Cliente: 19360, não atende a configuração de quantidade mínima de skus de 30, SKUS 5",
+          "Cliente: 19491, não atende a configuração de quantidade mínima de skus de 30, SKUS 7",
+          "Cliente: 34499, não atende a configuração de quantidade mínima de skus de 30, SKUS 1",
+          "Cliente: 549, não atende a configuração de quantidade mínima de skus de 30, SKUS 11",
+          "Cliente: 3686, não atende a configuração de quantidade mínima de skus de 30, SKUS 3",
+          "Cliente: 17382, não atende a configuração de quantidade mínima de skus de 30, SKUS 9",
+          "Cliente: 47816, não atende a configuração de quantidade mínima de skus de 30, SKUS 4",
+          "Cliente: 41507, não atende a configuração de quantidade mínima de skus de 30, SKUS 3",
+          "Cliente: 48650, não atende a configuração de quantidade mínima de skus de 30, SKUS 3",
+          "Cliente: 3173, não atende a configuração de quantidade mínima de skus de 30, SKUS 3",
+          "Cliente: 1981, não atende a configuração de quantidade mínima de skus de 30, SKUS 8",
+          "Cliente: 98685, não atende a configuração de quantidade mínima de skus de 30, SKUS 9",
+          "Cliente: 42268, não atende a configuração de quantidade mínima de skus de 30, SKUS 3",
+          "Cliente: 46810, não atende a configuração de quantidade mínima de skus de 30, SKUS 4",
+          "Cliente: 8732, não atende a configuração de quantidade mínima de skus de 30, SKUS 12",
+          "Cliente: 20477, não atende a configuração de quantidade mínima de skus de 30, SKUS 15",
+          "Cliente: 33340, não atende a configuração de quantidade mínima de skus de 30, SKUS 7",
+          "Cliente complexo: False, mapa ",
+          "Regra ComplexGroupLoadRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "BulkPalletRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.349174",
+      "end_date": "2026-04-14T00:53:21.353194",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "BulkPalletRule: processing 61 items (post-filter)",
+        "Pallet adicionado na baia 1 / 65, tamanho 42 com 175 GUARANA  ANTARCTICA PET 1L CAIXA C/6 NOVA RIO, ocupacao 42, fechado:True",
+        "33 restantes no contexto de GUARANA  ANTARCTICA PET 1L CAIXA C/6 NOVA RIO depois de adicionar 175",
+        "Regra BulkPalletRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "BulkPalletRule",
+        "Logs": [
+          "BulkPalletRule: processing 61 items (post-filter)",
+          "Pallet adicionado na baia 1 / 65, tamanho 42 com 175 GUARANA  ANTARCTICA PET 1L CAIXA C/6 NOVA RIO, ocupacao 42, fechado:True",
+          "33 restantes no contexto de GUARANA  ANTARCTICA PET 1L CAIXA C/6 NOVA RIO depois de adicionar 175",
+          "Regra BulkPalletRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "ChoppPalletizationRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.353252",
+      "end_date": "2026-04-14T00:53:21.354298",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Iniciando o processamento 1 itens de chope sem layer code na regra de paletização chope",
+        "Chopes agrupados em 1 grupos com base na sua configuração de palete dúzia",
+        "Processando agrupamento palete dúzia 24",
+        "Adicionado o item CHOPP BRAHMA CLARO BARRIL KEG 30L                  na baia 5 / A, na quantidade 1 ficando com a ocupacao de 1.75",
+        "Regra ChoppPalletizationRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "ChoppPalletizationRule",
+        "Logs": [
+          "Iniciando o processamento 1 itens de chope sem layer code na regra de paletização chope",
+          "Chopes agrupados em 1 grupos com base na sua configuração de palete dúzia",
+          "Processando agrupamento palete dúzia 24",
+          "Adicionado o item CHOPP BRAHMA CLARO BARRIL KEG 30L                  na baia 5 / A, na quantidade 1 ficando com a ocupacao de 1.75",
+          "Regra ChoppPalletizationRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "BulkPalletAdditionalOccupationRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.354348",
+      "end_date": "2026-04-14T00:53:21.354360",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Motivo - Configuração 'OccupationAdjustmentToPreventExcessHeight' está desabilitada",
+        "Regra BulkPalletAdditionalOccupationRule não executada!"
+      ],
+      "raw": {
+        "Rule": "BulkPalletAdditionalOccupationRule",
+        "Logs": [
+          "Motivo - Configuração 'OccupationAdjustmentToPreventExcessHeight' está desabilitada",
+          "Regra BulkPalletAdditionalOccupationRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "LayerRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.354452",
+      "end_date": "2026-04-14T00:53:21.354837",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Regra LayerRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "LayerRule",
+        "Logs": [
+          "Regra LayerRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "PalletGroupSubGroupRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.354877",
+      "end_date": "2026-04-14T00:53:21.379515",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Pallet adicionado na baia 1 / M, tamanho 42 CC com 32 itens de 2546-ORIGINAL 600ML GFA                   , ocupacao 32.00 CC",
+        "Pallet adicionado na baia 1 / M, tamanho 42 CC com 6 itens de 982-SKOL 600ML GFA                              , ocupacao 6.0 CC",
+        "Pallet adicionado na baia 1 / M, tamanho 42 CC com 4 itens de 32785-CORONA EXTRA N ONE WAY 600ML GARRAFEIRA C/24, ocupacao 4.0 CC",
+        "Pallet adicionado na baia 2 / A, tamanho 42 CC com 10 itens de 978-BRAHMA CHOPP 300ML GFA          , ocupacao 5.83 CC",
+        "Pallet adicionado na baia 2 / A, tamanho 42 CC com 5 itens de 972-Skol 300ML GFA, ocupacao 2.91 CC",
+        "Pallet adicionado na baia 2 / A, tamanho 42 CC com 2 itens de 24819-ORIGINAL 300ML, ocupacao 1.16 CC",
+        "Pallet adicionado na baia 2 / A, tamanho 42 CC com 1 itens de 2532-ANTARCTICA PILSEN 300ML, ocupacao 0.58 CC",
+        "Pallet adicionado na baia 2 / M, tamanho 42 CC com 8 itens de 1743-ANTARCTICA PILSEN GFA VD 1L COM TTC               , ocupacao 6.72 CC",
+        "Pallet adicionado na baia 2 / M, tamanho 42 CC com 5 itens de 1388-SKOL GFA VD 1L 2 99, ocupacao 4.2 CC",
+        "Pallet adicionado na baia 2 / M, tamanho 42 CC com 2 itens de 29253-ORIGINAL GFA VD 1L, ocupacao 1.68 CC",
+        "Pallet adicionado na baia 3 / A, tamanho 42 CC com 5 itens de 23186-SPATEN N 600ML, ocupacao 5.00 CC",
+        "Pallet adicionado na baia 3 / A, tamanho 42 CC com 2 itens de 988-BRAHMA CHOPP 600ML GFA                                , ocupacao 2.0 CC",
+        "Pallet adicionado na baia 3 / A, tamanho 42 CC com 2 itens de 2538-ANTARCTICA PILSEN 600ML, ocupacao 2.0 CC",
+        "Pallet adicionado na baia 3 / A, tamanho 42 CC com 1 itens de 2544-EXTRA SERRAMALTE 600ML GFA                        , ocupacao 1.0 CC",
+        "Pallet adicionado na baia 3 / A, tamanho 42 CC com 1 itens de 20329-BRAHMA DUPLO MALTE 600ML, ocupacao 1.0 CC",
+        "Pallet adicionado na baia 3 / M, tamanho 42 CC com 2 itens de 36242-GUARANA CHP ANTARCTICA ONE WAY 300ML CX C/24, ocupacao 1.20 CC",
+        "Pallet adicionado na baia 4 / A, tamanho 42 CC com 33 itens de 2132-GUARANA  ANTARCTICA PET 1L CAIXA C/6 NOVA RIO, ocupacao 7.92 CC",
+        "Pallet adicionado na baia 4 / A, tamanho 42 CC com 1 itens de 7703-PEPSI COLA PET 1L CAIXA C/6, ocupacao 0.24 CC",
+        "Pallet adicionado na baia 4 / M, tamanho 42 CC com 16 itens de 20603-ORIGINAL LT 269ML CX CARTAO C/8 NPAL, ocupacao 1.29 CC",
+        "Pallet adicionado na baia 4 / M, tamanho 42 CC com 11 itens de 13566-SKOL BEATS SENSES LT 269ML CX C/8 FRIDGE PACK     , ocupacao 0.88 CC",
+        "Pallet adicionado na baia 4 / M, tamanho 42 CC com 5 itens de 9069-BRAHMA CHOPP LATA 350 SH C/12, ocupacao 0.73 CC",
+        "Pallet adicionado na baia 4 / M, tamanho 42 CC com 5 itens de 9084-GUARANA LATA 350 ML C/12 NPAL, ocupacao 0.73 CC",
+        "Pallet adicionado na baia 4 / M, tamanho 42 CC com 5 itens de 9085-GUARANA CHP ANTARCTICA DIET LATA 350ML SH C/12 NPAL, ocupacao 0.73 CC",
+        "Pallet adicionado na baia 4 / M, tamanho 42 CC com 4 itens de 9068-SKOL LATA 350ML SH C/12 NPAL                      , ocupacao 0.58 CC",
+        "Pallet adicionado na baia 4 / M, tamanho 42 CC com 4 itens de 1745-Skol LT 269ML C15, ocupacao 0.56 CC",
+        "Pallet adicionado na baia 4 / M, tamanho 42 CC com 1 itens de 9092-TONICA ANTARCTICA DIET LATA 350ML SH C/12 NPAL, ocupacao 0.14 CC",
+        "Pallet adicionado na baia 4 / M, tamanho 42 CC com 1 itens de 26204-SPATEN LT 269ML CX CARTAO C/8 NPAL, ocupacao 0.08 CC",
+        "Pallet adicionado na baia 4 / M, tamanho 42 CC com 1 itens de 33734-BEATS RED MIX LT 269ML SH C/8, ocupacao 0.08 CC",
+        "Pallet adicionado na baia 4 / M, tamanho 42 CC com 1 itens de 12948-BRAHMA ZERO LATA SHRINK 350, ocupacao 0.14 CC",
+        "Pallet adicionado na baia 5 / M, tamanho 42 CC com 12 itens de 2349-GUARANA  ANTARCTICA PET 2L CAIXA C/6           , ocupacao 5.04 CC",
+        "Pallet adicionado na baia 5 / M, tamanho 42 CC com 3 itens de 503-SUKITA PET 2L CAIXA C/6                           , ocupacao 1.26 CC",
+        "Pallet adicionado na baia 5 / M, tamanho 42 CC com 2 itens de 1166-SUKITA UVA PET 2L CAIXA C/6                       , ocupacao 0.84 CC",
+        "Pallet adicionado na baia 5 / M, tamanho 42 CC com 2 itens de 21441-SUKITA  LIMAO  PET 2L CAIXA C/6, ocupacao 0.84 CC",
+        "Pallet adicionado na baia 5 / M, tamanho 42 CC com 2 itens de 4409-PEPSI TWIST PET 2L SHRINK C/6                     , ocupacao 0.84 CC",
+        "Pallet adicionado na baia 5 / M, tamanho 42 CC com 2 itens de 2353-GUARANA CHP ANTARCTICA DIET PET 2L CAIXA C/6, ocupacao 0.84 CC",
+        "Regra PalletGroupSubGroupRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "PalletGroupSubGroupRule",
+        "Logs": [
+          "Pallet adicionado na baia 1 / M, tamanho 42 CC com 32 itens de 2546-ORIGINAL 600ML GFA                   , ocupacao 32.00 CC",
+          "Pallet adicionado na baia 1 / M, tamanho 42 CC com 6 itens de 982-SKOL 600ML GFA                              , ocupacao 6.0 CC",
+          "Pallet adicionado na baia 1 / M, tamanho 42 CC com 4 itens de 32785-CORONA EXTRA N ONE WAY 600ML GARRAFEIRA C/24, ocupacao 4.0 CC",
+          "Pallet adicionado na baia 2 / A, tamanho 42 CC com 10 itens de 978-BRAHMA CHOPP 300ML GFA          , ocupacao 5.83 CC",
+          "Pallet adicionado na baia 2 / A, tamanho 42 CC com 5 itens de 972-Skol 300ML GFA, ocupacao 2.91 CC",
+          "Pallet adicionado na baia 2 / A, tamanho 42 CC com 2 itens de 24819-ORIGINAL 300ML, ocupacao 1.16 CC",
+          "Pallet adicionado na baia 2 / A, tamanho 42 CC com 1 itens de 2532-ANTARCTICA PILSEN 300ML, ocupacao 0.58 CC",
+          "Pallet adicionado na baia 2 / M, tamanho 42 CC com 8 itens de 1743-ANTARCTICA PILSEN GFA VD 1L COM TTC               , ocupacao 6.72 CC",
+          "Pallet adicionado na baia 2 / M, tamanho 42 CC com 5 itens de 1388-SKOL GFA VD 1L 2 99, ocupacao 4.2 CC",
+          "Pallet adicionado na baia 2 / M, tamanho 42 CC com 2 itens de 29253-ORIGINAL GFA VD 1L, ocupacao 1.68 CC",
+          "Pallet adicionado na baia 3 / A, tamanho 42 CC com 5 itens de 23186-SPATEN N 600ML, ocupacao 5.00 CC",
+          "Pallet adicionado na baia 3 / A, tamanho 42 CC com 2 itens de 988-BRAHMA CHOPP 600ML GFA                                , ocupacao 2.0 CC",
+          "Pallet adicionado na baia 3 / A, tamanho 42 CC com 2 itens de 2538-ANTARCTICA PILSEN 600ML, ocupacao 2.0 CC",
+          "Pallet adicionado na baia 3 / A, tamanho 42 CC com 1 itens de 2544-EXTRA SERRAMALTE 600ML GFA                        , ocupacao 1.0 CC",
+          "Pallet adicionado na baia 3 / A, tamanho 42 CC com 1 itens de 20329-BRAHMA DUPLO MALTE 600ML, ocupacao 1.0 CC",
+          "Pallet adicionado na baia 3 / M, tamanho 42 CC com 2 itens de 36242-GUARANA CHP ANTARCTICA ONE WAY 300ML CX C/24, ocupacao 1.20 CC",
+          "Pallet adicionado na baia 4 / A, tamanho 42 CC com 33 itens de 2132-GUARANA  ANTARCTICA PET 1L CAIXA C/6 NOVA RIO, ocupacao 7.92 CC",
+          "Pallet adicionado na baia 4 / A, tamanho 42 CC com 1 itens de 7703-PEPSI COLA PET 1L CAIXA C/6, ocupacao 0.24 CC",
+          "Pallet adicionado na baia 4 / M, tamanho 42 CC com 16 itens de 20603-ORIGINAL LT 269ML CX CARTAO C/8 NPAL, ocupacao 1.29 CC",
+          "Pallet adicionado na baia 4 / M, tamanho 42 CC com 11 itens de 13566-SKOL BEATS SENSES LT 269ML CX C/8 FRIDGE PACK     , ocupacao 0.88 CC",
+          "Pallet adicionado na baia 4 / M, tamanho 42 CC com 5 itens de 9069-BRAHMA CHOPP LATA 350 SH C/12, ocupacao 0.73 CC",
+          "Pallet adicionado na baia 4 / M, tamanho 42 CC com 5 itens de 9084-GUARANA LATA 350 ML C/12 NPAL, ocupacao 0.73 CC",
+          "Pallet adicionado na baia 4 / M, tamanho 42 CC com 5 itens de 9085-GUARANA CHP ANTARCTICA DIET LATA 350ML SH C/12 NPAL, ocupacao 0.73 CC",
+          "Pallet adicionado na baia 4 / M, tamanho 42 CC com 4 itens de 9068-SKOL LATA 350ML SH C/12 NPAL                      , ocupacao 0.58 CC",
+          "Pallet adicionado na baia 4 / M, tamanho 42 CC com 4 itens de 1745-Skol LT 269ML C15, ocupacao 0.56 CC",
+          "Pallet adicionado na baia 4 / M, tamanho 42 CC com 1 itens de 9092-TONICA ANTARCTICA DIET LATA 350ML SH C/12 NPAL, ocupacao 0.14 CC",
+          "Pallet adicionado na baia 4 / M, tamanho 42 CC com 1 itens de 26204-SPATEN LT 269ML CX CARTAO C/8 NPAL, ocupacao 0.08 CC",
+          "Pallet adicionado na baia 4 / M, tamanho 42 CC com 1 itens de 33734-BEATS RED MIX LT 269ML SH C/8, ocupacao 0.08 CC",
+          "Pallet adicionado na baia 4 / M, tamanho 42 CC com 1 itens de 12948-BRAHMA ZERO LATA SHRINK 350, ocupacao 0.14 CC",
+          "Pallet adicionado na baia 5 / M, tamanho 42 CC com 12 itens de 2349-GUARANA  ANTARCTICA PET 2L CAIXA C/6           , ocupacao 5.04 CC",
+          "Pallet adicionado na baia 5 / M, tamanho 42 CC com 3 itens de 503-SUKITA PET 2L CAIXA C/6                           , ocupacao 1.26 CC",
+          "Pallet adicionado na baia 5 / M, tamanho 42 CC com 2 itens de 1166-SUKITA UVA PET 2L CAIXA C/6                       , ocupacao 0.84 CC",
+          "Pallet adicionado na baia 5 / M, tamanho 42 CC com 2 itens de 21441-SUKITA  LIMAO  PET 2L CAIXA C/6, ocupacao 0.84 CC",
+          "Pallet adicionado na baia 5 / M, tamanho 42 CC com 2 itens de 4409-PEPSI TWIST PET 2L SHRINK C/6                     , ocupacao 0.84 CC",
+          "Pallet adicionado na baia 5 / M, tamanho 42 CC com 2 itens de 2353-GUARANA CHP ANTARCTICA DIET PET 2L CAIXA C/6, ocupacao 0.84 CC",
+          "Regra PalletGroupSubGroupRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "NonPalletizedProductsRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.379840",
+      "end_date": "2026-04-14T00:53:21.389333",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Item adicionado 22177 no espaco 4 / M - Quantidade: 5",
+        "Item adicionado 8413 no espaco 4 / A - Quantidade: 4",
+        "Item adicionado 13061 no espaco 4 / A - Quantidade: 4",
+        "Item adicionado 20535 no espaco 3 / M - Quantidade: 3",
+        "Item adicionado 32969 no espaco 4 / M - Quantidade: 3",
+        "Item adicionado 21668 no espaco 3 / M - Quantidade: 2",
+        "Item adicionado 18152 no espaco 5 / M - Quantidade: 2",
+        "Item adicionado 11110 no espaco 4 / M - Quantidade: 1",
+        "Item adicionado 19229 no espaco 4 / M - Quantidade: 1",
+        "Item adicionado 21666 no espaco 4 / M - Quantidade: 1",
+        "Item adicionado 34420 no espaco 4 / M - Quantidade: 1",
+        "Item adicionado 8411 no espaco 4 / A - Quantidade: 1",
+        "Item adicionado 8791 no espaco 4 / A - Quantidade: 1",
+        "Item adicionado 32164 no espaco 4 / A - Quantidade: 1",
+        "Juntando espacos para evitar remonte",
+        "Adicionando os items nos pallets com o mesmo tipo",
+        "Produtos trocados de 3 / A para 2 / A, nova ocupacao de 21.48",
+        "Produtos trocados de 4 / A para 5 / M, nova ocupacao de 21.38",
+        "Chamando a regra PalletDeMesmoGrupoESubgrupo para os items e mountedSpaces filtrados anteriormente",
+        "Pallet adicionado na baia 3 / A, tamanho 42 CC com 3 itens de 18836-C/24 Corona LONG NECK 330ml, ocupacao 1.5 CC",
+        "Pallet adicionado na baia 3 / A, tamanho 42 CC com 1 itens de 24168-MICHELOB ULTRA N LONG NECK 330ML SIX-PACK SHRINK C, ocupacao 0.5 CC",
+        "Pallet adicionado na baia 3 / A, tamanho 42 CC com 1 itens de 17808-BUD LONG NECK 330ML CX24, ocupacao 0.5 CC",
+        "Pallet adicionado na baia 3 / A, tamanho 42 CC com 1 itens de 29580-STELLA PURE GOLD LONG NECK 330ML SP SH C/4, ocupacao 0.5 CC",
+        "Pallet adicionado na baia 3 / A, tamanho 42 CC com 1 itens de 36015-SPATEN N LONG NECK 330ML SIX-PACK SHRINK C/2, ocupacao 0.25 CC",
+        "Regra NonPalletizedProductsRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "NonPalletizedProductsRule",
+        "Logs": [
+          "Item adicionado 22177 no espaco 4 / M - Quantidade: 5",
+          "Item adicionado 8413 no espaco 4 / A - Quantidade: 4",
+          "Item adicionado 13061 no espaco 4 / A - Quantidade: 4",
+          "Item adicionado 20535 no espaco 3 / M - Quantidade: 3",
+          "Item adicionado 32969 no espaco 4 / M - Quantidade: 3",
+          "Item adicionado 21668 no espaco 3 / M - Quantidade: 2",
+          "Item adicionado 18152 no espaco 5 / M - Quantidade: 2",
+          "Item adicionado 11110 no espaco 4 / M - Quantidade: 1",
+          "Item adicionado 19229 no espaco 4 / M - Quantidade: 1",
+          "Item adicionado 21666 no espaco 4 / M - Quantidade: 1",
+          "Item adicionado 34420 no espaco 4 / M - Quantidade: 1",
+          "Item adicionado 8411 no espaco 4 / A - Quantidade: 1",
+          "Item adicionado 8791 no espaco 4 / A - Quantidade: 1",
+          "Item adicionado 32164 no espaco 4 / A - Quantidade: 1",
+          "Juntando espacos para evitar remonte",
+          "Adicionando os items nos pallets com o mesmo tipo",
+          "Produtos trocados de 3 / A para 2 / A, nova ocupacao de 21.48",
+          "Produtos trocados de 4 / A para 5 / M, nova ocupacao de 21.38",
+          "Chamando a regra PalletDeMesmoGrupoESubgrupo para os items e mountedSpaces filtrados anteriormente",
+          "Pallet adicionado na baia 3 / A, tamanho 42 CC com 3 itens de 18836-C/24 Corona LONG NECK 330ml, ocupacao 1.5 CC",
+          "Pallet adicionado na baia 3 / A, tamanho 42 CC com 1 itens de 24168-MICHELOB ULTRA N LONG NECK 330ML SIX-PACK SHRINK C, ocupacao 0.5 CC",
+          "Pallet adicionado na baia 3 / A, tamanho 42 CC com 1 itens de 17808-BUD LONG NECK 330ML CX24, ocupacao 0.5 CC",
+          "Pallet adicionado na baia 3 / A, tamanho 42 CC com 1 itens de 29580-STELLA PURE GOLD LONG NECK 330ML SP SH C/4, ocupacao 0.5 CC",
+          "Pallet adicionado na baia 3 / A, tamanho 42 CC com 1 itens de 36015-SPATEN N LONG NECK 330ML SIX-PACK SHRINK C/2, ocupacao 0.25 CC",
+          "Regra NonPalletizedProductsRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "SnapshotRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.389747",
+      "end_date": "2026-04-14T00:53:21.390138",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Regra SnapshotRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "SnapshotRule",
+        "Logs": [
+          "Regra SnapshotRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "NonLayerOnLayerPalletRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.390480",
+      "end_date": "2026-04-14T00:53:21.390557",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Palete nao se encaixa na regra de nao layer. Executando proxima regra.",
+        "Regra NonLayerOnLayerPalletRule não executada!"
+      ],
+      "raw": {
+        "Rule": "NonLayerOnLayerPalletRule",
+        "Logs": [
+          "Palete nao se encaixa na regra de nao layer. Executando proxima regra.",
+          "Regra NonLayerOnLayerPalletRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "ReturnableAndDisposableSplitRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.391093",
+      "end_date": "2026-04-14T00:53:21.391132",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Regra ReturnableAndDisposableSplitRule desabilitada nas configurações, pulando execução.",
+        "Regra ReturnableAndDisposableSplitRule não executada!"
+      ],
+      "raw": {
+        "Rule": "ReturnableAndDisposableSplitRule",
+        "Logs": [
+          "Regra ReturnableAndDisposableSplitRule desabilitada nas configurações, pulando execução.",
+          "Regra ReturnableAndDisposableSplitRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "ReturnableAndDisposableSplitRemountRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.391577",
+      "end_date": "2026-04-14T00:53:21.391896",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Nenhum item elegivel para remount encontrado, pulando regra de remount.",
+        "Regra ReturnableAndDisposableSplitRemountRule não executada!"
+      ],
+      "raw": {
+        "Rule": "ReturnableAndDisposableSplitRemountRule",
+        "Logs": [
+          "Nenhum item elegivel para remount encontrado, pulando regra de remount.",
+          "Regra ReturnableAndDisposableSplitRemountRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "RemountRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.392333",
+      "end_date": "2026-04-14T00:53:21.392608",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Nenhum item elegivel para remount encontrado, pulando regra de remount.",
+        "Regra RemountRule não executada!"
+      ],
+      "raw": {
+        "Rule": "RemountRule",
+        "Logs": [
+          "Nenhum item elegivel para remount encontrado, pulando regra de remount.",
+          "Regra RemountRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "IsotonicWaterRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.393036",
+      "end_date": "2026-04-14T00:53:21.395463",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "IsotonicWaterRule: iniciando execução com MinimumOccupationPercentage=0",
+        "IsotonicWaterRule: tentando adicionar água no primeiro espaço vazio",
+        "Adicionado 7983 quantidade 0 no espaco 4 / A, ocupacao de 0.71",
+        "Adicionado 32067 quantidade 0 no espaco 4 / A, ocupacao de 0.99",
+        "Adicionado 4254 quantidade 0 no espaco 4 / A, ocupacao de 1.53",
+        "Adicionado 7982 quantidade 0 no espaco 4 / A, ocupacao de 1.81",
+        "Adicionado 4249 quantidade 0 no espaco 4 / A, ocupacao de 2.18",
+        "Adicionado 24042 quantidade 0 no espaco 4 / A, ocupacao de 2.55",
+        "Adicionado 4311 quantidade 0 no espaco 4 / A, ocupacao de 2.83",
+        "IsotonicWaterRule: espaço 4/A usado",
+        "IsotonicWaterRule: tentando juntar 2 grupos de espaços",
+        "IsotonicWaterRule: tentando adicionar água no primeiro espaço vazio (segunda tentativa)",
+        "Regra IsotonicWaterRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "IsotonicWaterRule",
+        "Logs": [
+          "IsotonicWaterRule: iniciando execução com MinimumOccupationPercentage=0",
+          "IsotonicWaterRule: tentando adicionar água no primeiro espaço vazio",
+          "Adicionado 7983 quantidade 0 no espaco 4 / A, ocupacao de 0.71",
+          "Adicionado 32067 quantidade 0 no espaco 4 / A, ocupacao de 0.99",
+          "Adicionado 4254 quantidade 0 no espaco 4 / A, ocupacao de 1.53",
+          "Adicionado 7982 quantidade 0 no espaco 4 / A, ocupacao de 1.81",
+          "Adicionado 4249 quantidade 0 no espaco 4 / A, ocupacao de 2.18",
+          "Adicionado 24042 quantidade 0 no espaco 4 / A, ocupacao de 2.55",
+          "Adicionado 4311 quantidade 0 no espaco 4 / A, ocupacao de 2.83",
+          "IsotonicWaterRule: espaço 4/A usado",
+          "IsotonicWaterRule: tentando juntar 2 grupos de espaços",
+          "IsotonicWaterRule: tentando adicionar água no primeiro espaço vazio (segunda tentativa)",
+          "Regra IsotonicWaterRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "IsotonicWaterWithoutMinimumOccupationRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.395816",
+      "end_date": "2026-04-14T00:53:21.397105",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "IsotonicWaterRule: iniciando execução com MinimumOccupationPercentage=0",
+        "IsotonicWaterRule: tentando adicionar água no primeiro espaço vazio",
+        "IsotonicWaterRule: tentando juntar 2 grupos de espaços",
+        "IsotonicWaterRule: tentando adicionar água no primeiro espaço vazio (segunda tentativa)",
+        "Regra IsotonicWaterWithoutMinimumOccupationRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "IsotonicWaterWithoutMinimumOccupationRule",
+        "Logs": [
+          "IsotonicWaterRule: iniciando execução com MinimumOccupationPercentage=0",
+          "IsotonicWaterRule: tentando adicionar água no primeiro espaço vazio",
+          "IsotonicWaterRule: tentando juntar 2 grupos de espaços",
+          "IsotonicWaterRule: tentando adicionar água no primeiro espaço vazio (segunda tentativa)",
+          "Regra IsotonicWaterWithoutMinimumOccupationRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "RemountSplittedRebuildPalletRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.397443",
+      "end_date": "2026-04-14T00:53:21.397538",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Snapshot nao possui produtos divididos, pulando regra de remount com rebuild.",
+        "Regra RemountSplittedRebuildPalletRule não executada!"
+      ],
+      "raw": {
+        "Rule": "RemountSplittedRebuildPalletRule",
+        "Logs": [
+          "Snapshot nao possui produtos divididos, pulando regra de remount com rebuild.",
+          "Regra RemountSplittedRebuildPalletRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "EmptySpaceRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.397870",
+      "end_date": "2026-04-14T00:53:21.397978",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Motivo - Não há baias vazias ou não há espaços montados elegíveis, regra não será executada",
+        "Regra EmptySpaceRule não executada!"
+      ],
+      "raw": {
+        "Rule": "EmptySpaceRule",
+        "Logs": [
+          "Motivo - Não há baias vazias ou não há espaços montados elegíveis, regra não será executada",
+          "Regra EmptySpaceRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "BuildMountedSpacesWithFewDisposableProductsRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.398318",
+      "end_date": "2026-04-14T00:53:21.398330",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Motivo - Configuração 'JoinDisposableContainers' está desabilitada",
+        "Regra BuildMountedSpacesWithFewDisposableProductsRule não executada!"
+      ],
+      "raw": {
+        "Rule": "BuildMountedSpacesWithFewDisposableProductsRule",
+        "Logs": [
+          "Motivo - Configuração 'JoinDisposableContainers' está desabilitada",
+          "Regra BuildMountedSpacesWithFewDisposableProductsRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "PackageRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.398664",
+      "end_date": "2026-04-14T00:53:21.398794",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Não foram encontrados itens marketplace com quantidade a paletizar, parando execução da regra",
+        "Regra PackageRule não executada!"
+      ],
+      "raw": {
+        "Rule": "PackageRule",
+        "Logs": [
+          "Não foram encontrados itens marketplace com quantidade a paletizar, parando execução da regra",
+          "Regra PackageRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "BoxTemplateRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.399116",
+      "end_date": "2026-04-14T00:53:21.400648",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Paletizando o item: 563890 na quantidade: 1 na baia: 5/A e ocupação: 1.0",
+        "Paletizando o item: 188005 na quantidade: 1 na baia: 5/A e ocupação: 0.84",
+        "Regra BoxTemplateRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "BoxTemplateRule",
+        "Logs": [
+          "Paletizando o item: 563890 na quantidade: 1 na baia: 5/A e ocupação: 1.0",
+          "Paletizando o item: 188005 na quantidade: 1 na baia: 5/A e ocupação: 0.84",
+          "Regra BoxTemplateRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "RecalculatePalletOccupationRule",
+      "type": "route",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.401158",
+      "end_date": "2026-04-14T00:53:21.403060",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Regra RecalculatePalletOccupationRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "RecalculatePalletOccupationRule",
+        "Logs": [
+          "Regra RecalculatePalletOccupationRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "ReassignmentNonPalletizedItemsRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.404487",
+      "end_date": "2026-04-14T00:53:21.404625",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Não foram encontrados itens não paletizados, a regra não será executada",
+        "Regra ReassignmentNonPalletizedItemsRule não executada!"
+      ],
+      "raw": {
+        "Rule": "ReassignmentNonPalletizedItemsRule",
+        "Logs": [
+          "Não foram encontrados itens não paletizados, a regra não será executada",
+          "Regra ReassignmentNonPalletizedItemsRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "ReassignmentNonPalletizedItemsWithSplitItemRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.404976",
+      "end_date": "2026-04-14T00:53:21.405078",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Não foram encontrados itens não paletizados, a regra não será executada",
+        "Regra ReassignmentNonPalletizedItemsWithSplitItemRule não executada!"
+      ],
+      "raw": {
+        "Rule": "ReassignmentNonPalletizedItemsWithSplitItemRule",
+        "Logs": [
+          "Não foram encontrados itens não paletizados, a regra não será executada",
+          "Regra ReassignmentNonPalletizedItemsWithSplitItemRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "JoinMountedSpacesWithLessOccupationRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.405408",
+      "end_date": "2026-04-14T00:53:21.407910",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Movendo os produts (Cod:7983 Qtd:5, Cod:32067 Qtd:2, Cod:4254 Qtd:2, Cod:7982 Qtd:2, Cod:4249 Qtd:1, Cod:24042 Qtd:1, Cod:4311 Qtd:1) de (Space #4 (65) - Size: 42) para (Space #3 (65) - Size: 42).",
+        "Os produtos foram movidos de (Space #4 (65) - Size: 42) para (Space #3 (65) - Size: 42), nova ocupacao de 6.08",
+        "Movendo os produts (Cod:828 Qtd:1, Cod:563890 Qtd:1, Cod:188005 Qtd:1) de (Space #5 (65) - Size: 42) para (Space #3 (77) - Size: 42).",
+        "Os produtos foram movidos de (Space #5 (65) - Size: 42) para (Space #3 (77) - Size: 42), nova ocupacao de 7.41",
+        "Movendo os produts (Cod:20603 Qtd:16, Cod:13566 Qtd:11, Cod:9069 Qtd:5, Cod:9084 Qtd:5, Cod:9085 Qtd:5, Cod:9068 Qtd:4, Cod:1745 Qtd:4, Cod:9092 Qtd:1, Cod:26204 Qtd:1, Cod:33734 Qtd:1, Cod:12948 Qtd:1, Cod:22177 Qtd:5, Cod:32969 Qtd:3, Cod:11110 Qtd:1, Cod:19229 Qtd:1, Cod:21666 Qtd:1, Cod:34420 Qtd:1) de (Space #4 (77) - Size: 42) para (Space #3 (65) - Size: 42).",
+        "Os produtos foram movidos de (Space #4 (77) - Size: 42) para (Space #3 (65) - Size: 42), nova ocupacao de 13.06",
+        "Movendo os produts (Cod:36242 Qtd:2, Cod:20535 Qtd:3, Cod:21668 Qtd:2, Cod:828 Qtd:1, Cod:563890 Qtd:1, Cod:188005 Qtd:1) de (Space #3 (77) - Size: 42) para (Space #2 (77) - Size: 42).",
+        "Os produtos foram movidos de (Space #3 (77) - Size: 42) para (Space #2 (77) - Size: 42), nova ocupacao de 20",
+        "Não há palete com ocupação inferior a 22%",
+        "Regra JoinMountedSpacesWithLessOccupationRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "JoinMountedSpacesWithLessOccupationRule",
+        "Logs": [
+          "Movendo os produts (Cod:7983 Qtd:5, Cod:32067 Qtd:2, Cod:4254 Qtd:2, Cod:7982 Qtd:2, Cod:4249 Qtd:1, Cod:24042 Qtd:1, Cod:4311 Qtd:1) de (Space #4 (65) - Size: 42) para (Space #3 (65) - Size: 42).",
+          "Os produtos foram movidos de (Space #4 (65) - Size: 42) para (Space #3 (65) - Size: 42), nova ocupacao de 6.08",
+          "Movendo os produts (Cod:828 Qtd:1, Cod:563890 Qtd:1, Cod:188005 Qtd:1) de (Space #5 (65) - Size: 42) para (Space #3 (77) - Size: 42).",
+          "Os produtos foram movidos de (Space #5 (65) - Size: 42) para (Space #3 (77) - Size: 42), nova ocupacao de 7.41",
+          "Movendo os produts (Cod:20603 Qtd:16, Cod:13566 Qtd:11, Cod:9069 Qtd:5, Cod:9084 Qtd:5, Cod:9085 Qtd:5, Cod:9068 Qtd:4, Cod:1745 Qtd:4, Cod:9092 Qtd:1, Cod:26204 Qtd:1, Cod:33734 Qtd:1, Cod:12948 Qtd:1, Cod:22177 Qtd:5, Cod:32969 Qtd:3, Cod:11110 Qtd:1, Cod:19229 Qtd:1, Cod:21666 Qtd:1, Cod:34420 Qtd:1) de (Space #4 (77) - Size: 42) para (Space #3 (65) - Size: 42).",
+          "Os produtos foram movidos de (Space #4 (77) - Size: 42) para (Space #3 (65) - Size: 42), nova ocupacao de 13.06",
+          "Movendo os produts (Cod:36242 Qtd:2, Cod:20535 Qtd:3, Cod:21668 Qtd:2, Cod:828 Qtd:1, Cod:563890 Qtd:1, Cod:188005 Qtd:1) de (Space #3 (77) - Size: 42) para (Space #2 (77) - Size: 42).",
+          "Os produtos foram movidos de (Space #3 (77) - Size: 42) para (Space #2 (77) - Size: 42), nova ocupacao de 20",
+          "Não há palete com ocupação inferior a 22%",
+          "Regra JoinMountedSpacesWithLessOccupationRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "PalletEqualizationRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.408280",
+      "end_date": "2026-04-14T00:53:21.413819",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Iniciando execução da regra",
+        "Paletes selecionados para equalização: [Palete: (Space #2 (65) - Size: 42), Ocupação a permanecer: 25.20%, Ocupação a mover: 25.99%], [Palete: (Space #1 (77) - Size: 42), Ocupação a permanecer: 23.81%, Ocupação a mover: 76.19%], [Palete: (Space #5 (77) - Size: 42), Ocupação a permanecer: 27.92%, Ocupação a mover: 23.00%], [Palete: (Space #3 (65) - Size: 42), Ocupação a permanecer: 14.55%, Ocupação a mover: 16.83%], [Palete: (Space #2 (77) - Size: 42), Ocupação a permanecer: 13.19%, Ocupação a mover: 34.38%]",
+        "Movendo os produtos [20329, 978, 972, 24819] do Palete: (Space #2 (65) - Size: 42) para o Palete: (Space #3 (77) - Size: 42)",
+        "Distribuído o produto BRAHMA DUPLO MALTE 600ML na quantidade 1 do palete de origem 2 / A, para o espaço 3 / M com a ocupação 1,00",
+        "Distribuído o produto BRAHMA CHOPP 300ML GFA           na quantidade 10 do palete de origem 2 / A, para o espaço 3 / M com a ocupação 5,83",
+        "Distribuído o produto Skol 300ML GFA na quantidade 5 do palete de origem 2 / A, para o espaço 3 / M com a ocupação 2,91",
+        "Distribuído o produto ORIGINAL 300ML na quantidade 2 do palete de origem 2 / A, para o espaço 3 / M com a ocupação 1,16",
+        "Movendo os produtos [2546] do Palete: (Space #1 (77) - Size: 42) para o Palete: (Space #4 (65) - Size: 42)",
+        "Distribuído o produto ORIGINAL 600ML GFA                    na quantidade 32 do palete de origem 1 / M, para o espaço 4 / A com a ocupação 32,00",
+        "Movendo os produtos [2349, 503, 1166, 21441, 4409, 2353] do Palete: (Space #5 (77) - Size: 42) para o Palete: (Space #4 (77) - Size: 42)",
+        "Distribuído o produto GUARANA  ANTARCTICA PET 2L CAIXA C/6            na quantidade 12 do palete de origem 5 / M, para o espaço 4 / M com a ocupação 5,04",
+        "Distribuído o produto SUKITA PET 2L CAIXA C/6                            na quantidade 3 do palete de origem 5 / M, para o espaço 4 / M com a ocupação 1,26",
+        "Distribuído o produto SUKITA UVA PET 2L CAIXA C/6                        na quantidade 2 do palete de origem 5 / M, para o espaço 4 / M com a ocupação 0,84",
+        "Distribuído o produto SUKITA  LIMAO  PET 2L CAIXA C/6 na quantidade 2 do palete de origem 5 / M, para o espaço 4 / M com a ocupação 0,84",
+        "Distribuído o produto PEPSI TWIST PET 2L SHRINK C/6                      na quantidade 2 do palete de origem 5 / M, para o espaço 4 / M com a ocupação 0,84",
+        "Distribuído o produto GUARANA CHP ANTARCTICA DIET PET 2L CAIXA C/6 na quantidade 2 do palete de origem 5 / M, para o espaço 4 / M com a ocupação 0,84",
+        "Movendo os produtos [20603, 13566, 9069, 9084, 9085, 9068, 1745, 9092, 26204, 33734, 12948, 22177, 32969, 11110, 19229, 21666, 34420] do Palete: (Space #3 (65) - Size: 42) para o Palete: (Space #5 (65) - Size: 42)",
+        "Distribuído o produto ORIGINAL LT 269ML CX CARTAO C/8 NPAL na quantidade 16 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 1,29",
+        "Distribuído o produto SKOL BEATS SENSES LT 269ML CX C/8 FRIDGE PACK      na quantidade 11 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,88",
+        "Distribuído o produto BRAHMA CHOPP LATA 350 SH C/12 na quantidade 5 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,73",
+        "Distribuído o produto GUARANA LATA 350 ML C/12 NPAL na quantidade 5 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,73",
+        "Distribuído o produto GUARANA CHP ANTARCTICA DIET LATA 350ML SH C/12 NPAL na quantidade 5 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,73",
+        "Distribuído o produto SKOL LATA 350ML SH C/12 NPAL                       na quantidade 4 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,58",
+        "Distribuído o produto Skol LT 269ML C15 na quantidade 4 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,56",
+        "Distribuído o produto TONICA ANTARCTICA DIET LATA 350ML SH C/12 NPAL na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,14",
+        "Distribuído o produto SPATEN LT 269ML CX CARTAO C/8 NPAL na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,08",
+        "Distribuído o produto BEATS RED MIX LT 269ML SH C/8 na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,08",
+        "Distribuído o produto BRAHMA ZERO LATA SHRINK 350 na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,14",
+        "Distribuído o produto BUDWEISER ZERO LT SLEEK 350ML C 8 CX CARTAO na quantidade 5 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,52",
+        "Distribuído o produto RED BULL SUMMER MORANGO E PESSEGO LATA 250ML na quantidade 3 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,14",
+        "Distribuído o produto SKOL LATA 550ML SHRINK C/12  na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,23",
+        "Distribuído o produto RED BULL BR LATA 250ML C/6  SIX PACK NPAL na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,07",
+        "Distribuído o produto RED BULL TROPICAL BR LATA 250ML FOUR PACK NPAL . na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,04",
+        "Distribuído o produto RED BULL SUMMER MARACUJA E MELAO LATA 250ML FOUR P na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,04",
+        "Finalizado a execução da regra.",
+        "Regra PalletEqualizationRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "PalletEqualizationRule",
+        "Logs": [
+          "Iniciando execução da regra",
+          "Paletes selecionados para equalização: [Palete: (Space #2 (65) - Size: 42), Ocupação a permanecer: 25.20%, Ocupação a mover: 25.99%], [Palete: (Space #1 (77) - Size: 42), Ocupação a permanecer: 23.81%, Ocupação a mover: 76.19%], [Palete: (Space #5 (77) - Size: 42), Ocupação a permanecer: 27.92%, Ocupação a mover: 23.00%], [Palete: (Space #3 (65) - Size: 42), Ocupação a permanecer: 14.55%, Ocupação a mover: 16.83%], [Palete: (Space #2 (77) - Size: 42), Ocupação a permanecer: 13.19%, Ocupação a mover: 34.38%]",
+          "Movendo os produtos [20329, 978, 972, 24819] do Palete: (Space #2 (65) - Size: 42) para o Palete: (Space #3 (77) - Size: 42)",
+          "Distribuído o produto BRAHMA DUPLO MALTE 600ML na quantidade 1 do palete de origem 2 / A, para o espaço 3 / M com a ocupação 1,00",
+          "Distribuído o produto BRAHMA CHOPP 300ML GFA           na quantidade 10 do palete de origem 2 / A, para o espaço 3 / M com a ocupação 5,83",
+          "Distribuído o produto Skol 300ML GFA na quantidade 5 do palete de origem 2 / A, para o espaço 3 / M com a ocupação 2,91",
+          "Distribuído o produto ORIGINAL 300ML na quantidade 2 do palete de origem 2 / A, para o espaço 3 / M com a ocupação 1,16",
+          "Movendo os produtos [2546] do Palete: (Space #1 (77) - Size: 42) para o Palete: (Space #4 (65) - Size: 42)",
+          "Distribuído o produto ORIGINAL 600ML GFA                    na quantidade 32 do palete de origem 1 / M, para o espaço 4 / A com a ocupação 32,00",
+          "Movendo os produtos [2349, 503, 1166, 21441, 4409, 2353] do Palete: (Space #5 (77) - Size: 42) para o Palete: (Space #4 (77) - Size: 42)",
+          "Distribuído o produto GUARANA  ANTARCTICA PET 2L CAIXA C/6            na quantidade 12 do palete de origem 5 / M, para o espaço 4 / M com a ocupação 5,04",
+          "Distribuído o produto SUKITA PET 2L CAIXA C/6                            na quantidade 3 do palete de origem 5 / M, para o espaço 4 / M com a ocupação 1,26",
+          "Distribuído o produto SUKITA UVA PET 2L CAIXA C/6                        na quantidade 2 do palete de origem 5 / M, para o espaço 4 / M com a ocupação 0,84",
+          "Distribuído o produto SUKITA  LIMAO  PET 2L CAIXA C/6 na quantidade 2 do palete de origem 5 / M, para o espaço 4 / M com a ocupação 0,84",
+          "Distribuído o produto PEPSI TWIST PET 2L SHRINK C/6                      na quantidade 2 do palete de origem 5 / M, para o espaço 4 / M com a ocupação 0,84",
+          "Distribuído o produto GUARANA CHP ANTARCTICA DIET PET 2L CAIXA C/6 na quantidade 2 do palete de origem 5 / M, para o espaço 4 / M com a ocupação 0,84",
+          "Movendo os produtos [20603, 13566, 9069, 9084, 9085, 9068, 1745, 9092, 26204, 33734, 12948, 22177, 32969, 11110, 19229, 21666, 34420] do Palete: (Space #3 (65) - Size: 42) para o Palete: (Space #5 (65) - Size: 42)",
+          "Distribuído o produto ORIGINAL LT 269ML CX CARTAO C/8 NPAL na quantidade 16 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 1,29",
+          "Distribuído o produto SKOL BEATS SENSES LT 269ML CX C/8 FRIDGE PACK      na quantidade 11 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,88",
+          "Distribuído o produto BRAHMA CHOPP LATA 350 SH C/12 na quantidade 5 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,73",
+          "Distribuído o produto GUARANA LATA 350 ML C/12 NPAL na quantidade 5 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,73",
+          "Distribuído o produto GUARANA CHP ANTARCTICA DIET LATA 350ML SH C/12 NPAL na quantidade 5 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,73",
+          "Distribuído o produto SKOL LATA 350ML SH C/12 NPAL                       na quantidade 4 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,58",
+          "Distribuído o produto Skol LT 269ML C15 na quantidade 4 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,56",
+          "Distribuído o produto TONICA ANTARCTICA DIET LATA 350ML SH C/12 NPAL na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,14",
+          "Distribuído o produto SPATEN LT 269ML CX CARTAO C/8 NPAL na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,08",
+          "Distribuído o produto BEATS RED MIX LT 269ML SH C/8 na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,08",
+          "Distribuído o produto BRAHMA ZERO LATA SHRINK 350 na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,14",
+          "Distribuído o produto BUDWEISER ZERO LT SLEEK 350ML C 8 CX CARTAO na quantidade 5 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,52",
+          "Distribuído o produto RED BULL SUMMER MORANGO E PESSEGO LATA 250ML na quantidade 3 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,14",
+          "Distribuído o produto SKOL LATA 550ML SHRINK C/12  na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,23",
+          "Distribuído o produto RED BULL BR LATA 250ML C/6  SIX PACK NPAL na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,07",
+          "Distribuído o produto RED BULL TROPICAL BR LATA 250ML FOUR PACK NPAL . na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,04",
+          "Distribuído o produto RED BULL SUMMER MARACUJA E MELAO LATA 250ML FOUR P na quantidade 1 do palete de origem 3 / A, para o espaço 5 / A com a ocupação 0,04",
+          "Finalizado a execução da regra.",
+          "Regra PalletEqualizationRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "ReorderRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.414177",
+      "end_date": "2026-04-14T00:53:21.414191",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Configurações conflitantes detectadas, a regra não será executada",
+        "Regra ReorderRule não executada!"
+      ],
+      "raw": {
+        "Rule": "ReorderRule",
+        "Logs": [
+          "Configurações conflitantes detectadas, a regra não será executada",
+          "Regra ReorderRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "NewReorderRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.414937",
+      "end_date": "2026-04-14T00:53:21.421077",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Reordenando produtos do espaco 1 / A",
+        "Reordenando produtos do espaco 5 / A",
+        "Reordenando produtos do espaco 1 / M",
+        "Reordenando produtos do espaco 2 / A",
+        "Reordenando produtos do espaco 2 / M",
+        "Reordenando produtos do espaco 3 / A",
+        "Reordenando produtos do espaco 3 / M",
+        "Reordenando produtos do espaco 4 / A",
+        "Reordenando produtos do espaco 4 / M",
+        "Reordenando produtos do espaco 5 / M",
+        "Reordenando produtos do espaco 1 / A",
+        "Reordenando produtos do espaco 5 / A",
+        "Reordenando produtos do espaco 1 / M",
+        "Reordenando produtos do espaco 2 / A",
+        "Reordenando produtos do espaco 2 / M",
+        "Reordenando produtos do espaco 3 / A",
+        "Reordenando produtos do espaco 3 / M",
+        "Reordenando produtos do espaco 4 / A",
+        "Reordenando produtos do espaco 4 / M",
+        "Reordenando produtos do espaco 5 / M",
+        "Finalizado execucao da regra",
+        "Regra NewReorderRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "NewReorderRule",
+        "Logs": [
+          "Reordenando produtos do espaco 1 / A",
+          "Reordenando produtos do espaco 5 / A",
+          "Reordenando produtos do espaco 1 / M",
+          "Reordenando produtos do espaco 2 / A",
+          "Reordenando produtos do espaco 2 / M",
+          "Reordenando produtos do espaco 3 / A",
+          "Reordenando produtos do espaco 3 / M",
+          "Reordenando produtos do espaco 4 / A",
+          "Reordenando produtos do espaco 4 / M",
+          "Reordenando produtos do espaco 5 / M",
+          "Reordenando produtos do espaco 1 / A",
+          "Reordenando produtos do espaco 5 / A",
+          "Reordenando produtos do espaco 1 / M",
+          "Reordenando produtos do espaco 2 / A",
+          "Reordenando produtos do espaco 2 / M",
+          "Reordenando produtos do espaco 3 / A",
+          "Reordenando produtos do espaco 3 / M",
+          "Reordenando produtos do espaco 4 / A",
+          "Reordenando produtos do espaco 4 / M",
+          "Reordenando produtos do espaco 5 / M",
+          "Finalizado execucao da regra",
+          "Regra NewReorderRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "LoadBalancerRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.421833",
+      "end_date": "2026-04-14T00:53:21.421864",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Regra SideBalanceRule ativada, LoadBalancerRule nao sera executada",
+        "Regra LoadBalancerRule não executada!"
+      ],
+      "raw": {
+        "Rule": "LoadBalancerRule",
+        "Logs": [
+          "Regra SideBalanceRule ativada, LoadBalancerRule nao sera executada",
+          "Regra LoadBalancerRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "SideBalanceRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.422773",
+      "end_date": "2026-04-14T00:53:21.431517",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Iniciando execucao da regra",
+        "Inicio do balanceamento - Lado Motorista: 37.80% - Lado Ajudante: 62.20%",
+        "65/1 weight: 1128.75; 77/1 weight: 276.18; 65/2 weight: 281.99; 77/2 weight: 463.13; 65/3 weight: 154.52; 77/3 weight: 267.82; 65/4 weight: 883.20; 77/4 weight: 294.72; 65/5 weight: 205.47; 77/5 weight: 310.82",
+        "Movendo os produtos da Baia:65/1 para a Baia:77/1",
+        "Recalculado ocupação da Baia:77/1 - Antes:42.00 - Depois:42.00",
+        "Recalculando palete fechado da Baia:77/1 - Antes: True - Depois: True",
+        "Movendo os produtos da Baia:65/4 para a Baia:65/1",
+        "Recalculado ocupação da Baia:65/1 - Antes:32.00 - Depois:32.00",
+        "Recalculando palete fechado da Baia:65/1 - Antes: False - Depois: False",
+        "Movendo os produtos da Baia:77/2 para a Baia:65/2",
+        "Recalculado ocupação da Baia:65/2 - Antes:20.00 - Depois:20.01",
+        "Recalculando palete fechado da Baia:65/2 - Antes: False - Depois: False",
+        "Movendo os produtos da Baia:77/5 para a Baia:77/2",
+        "Recalculado ocupação da Baia:77/2 - Antes:11.72 - Depois:11.72",
+        "Recalculando palete fechado da Baia:77/2 - Antes: False - Depois: False",
+        "Movendo os produtos da Baia:77/4 para a Baia:65/3",
+        "Recalculado ocupação da Baia:65/3 - Antes:9.66 - Depois:9.66",
+        "Recalculando palete fechado da Baia:65/3 - Antes: False - Depois: False",
+        "Movendo os produtos da Baia:77/5 para a Baia:77/3",
+        "Recalculado ocupação da Baia:77/3 - Antes:10.58 - Depois:10.58",
+        "Recalculando palete fechado da Baia:77/3 - Antes: False - Depois: False",
+        "Recalculado ocupação da Baia:65/4 - Antes:10.00 - Depois:10.00",
+        "Recalculando palete fechado da Baia:65/4 - Antes: False - Depois: False",
+        "Movendo os produtos da Baia:77/5 para a Baia:77/4",
+        "Recalculado ocupação da Baia:77/4 - Antes:10.90 - Depois:10.90",
+        "Recalculando palete fechado da Baia:77/4 - Antes: False - Depois: False",
+        "Recalculado ocupação da Baia:65/5 - Antes:6.98 - Depois:6.98",
+        "Recalculando palete fechado da Baia:65/5 - Antes: False - Depois: False",
+        "Recalculado ocupação da Baia:77/5 - Antes:6.08 - Depois:6.08",
+        "Recalculando palete fechado da Baia:77/5 - Antes: False - Depois: False",
+        "Fim do balanceamento - Lado Motorista: 50.25% - Lado Ajudante: 49.75%",
+        "77/1 weight: 1128.75; 65/1 weight: 883.20; 65/2 weight: 463.13; 77/2 weight: 310.82; 77/3 weight: 281.99; 65/3 weight: 294.72; 65/4 weight: 276.18; 77/4 weight: 267.82; 65/5 weight: 205.47; 77/5 weight: 154.52",
+        "Regra SideBalanceRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "SideBalanceRule",
+        "Logs": [
+          "Iniciando execucao da regra",
+          "Inicio do balanceamento - Lado Motorista: 37.80% - Lado Ajudante: 62.20%",
+          "65/1 weight: 1128.75; 77/1 weight: 276.18; 65/2 weight: 281.99; 77/2 weight: 463.13; 65/3 weight: 154.52; 77/3 weight: 267.82; 65/4 weight: 883.20; 77/4 weight: 294.72; 65/5 weight: 205.47; 77/5 weight: 310.82",
+          "Movendo os produtos da Baia:65/1 para a Baia:77/1",
+          "Recalculado ocupação da Baia:77/1 - Antes:42.00 - Depois:42.00",
+          "Recalculando palete fechado da Baia:77/1 - Antes: True - Depois: True",
+          "Movendo os produtos da Baia:65/4 para a Baia:65/1",
+          "Recalculado ocupação da Baia:65/1 - Antes:32.00 - Depois:32.00",
+          "Recalculando palete fechado da Baia:65/1 - Antes: False - Depois: False",
+          "Movendo os produtos da Baia:77/2 para a Baia:65/2",
+          "Recalculado ocupação da Baia:65/2 - Antes:20.00 - Depois:20.01",
+          "Recalculando palete fechado da Baia:65/2 - Antes: False - Depois: False",
+          "Movendo os produtos da Baia:77/5 para a Baia:77/2",
+          "Recalculado ocupação da Baia:77/2 - Antes:11.72 - Depois:11.72",
+          "Recalculando palete fechado da Baia:77/2 - Antes: False - Depois: False",
+          "Movendo os produtos da Baia:77/4 para a Baia:65/3",
+          "Recalculado ocupação da Baia:65/3 - Antes:9.66 - Depois:9.66",
+          "Recalculando palete fechado da Baia:65/3 - Antes: False - Depois: False",
+          "Movendo os produtos da Baia:77/5 para a Baia:77/3",
+          "Recalculado ocupação da Baia:77/3 - Antes:10.58 - Depois:10.58",
+          "Recalculando palete fechado da Baia:77/3 - Antes: False - Depois: False",
+          "Recalculado ocupação da Baia:65/4 - Antes:10.00 - Depois:10.00",
+          "Recalculando palete fechado da Baia:65/4 - Antes: False - Depois: False",
+          "Movendo os produtos da Baia:77/5 para a Baia:77/4",
+          "Recalculado ocupação da Baia:77/4 - Antes:10.90 - Depois:10.90",
+          "Recalculando palete fechado da Baia:77/4 - Antes: False - Depois: False",
+          "Recalculado ocupação da Baia:65/5 - Antes:6.98 - Depois:6.98",
+          "Recalculando palete fechado da Baia:65/5 - Antes: False - Depois: False",
+          "Recalculado ocupação da Baia:77/5 - Antes:6.08 - Depois:6.08",
+          "Recalculando palete fechado da Baia:77/5 - Antes: False - Depois: False",
+          "Fim do balanceamento - Lado Motorista: 50.25% - Lado Ajudante: 49.75%",
+          "77/1 weight: 1128.75; 65/1 weight: 883.20; 65/2 weight: 463.13; 77/2 weight: 310.82; 77/3 weight: 281.99; 65/3 weight: 294.72; 65/4 weight: 276.18; 77/4 weight: 267.82; 65/5 weight: 205.47; 77/5 weight: 154.52",
+          "Regra SideBalanceRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "SafeSideRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.432345",
+      "end_date": "2026-04-14T00:53:21.432373",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Regra desativada, nao sera executada",
+        "Regra SafeSideRule não executada!"
+      ],
+      "raw": {
+        "Rule": "SafeSideRule",
+        "Logs": [
+          "Regra desativada, nao sera executada",
+          "Regra SafeSideRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "RecalculatePalletOccupationRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.433007",
+      "end_date": "2026-04-14T00:53:21.435330",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Regra RecalculatePalletOccupationRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "RecalculatePalletOccupationRule",
+        "Logs": [
+          "Regra RecalculatePalletOccupationRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "VehicleCapacityOverflowRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.436044",
+      "end_date": "2026-04-14T00:53:21.436776",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Regra VehicleCapacityOverflowRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "VehicleCapacityOverflowRule",
+        "Logs": [
+          "Regra VehicleCapacityOverflowRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "CalculatorOccupationRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.437121",
+      "end_date": "2026-04-14T00:53:21.438508",
+      "executed": true,
+      "mounted_spaces": [],
+      "logs": [
+        "Regra CalculatorOccupationRule executada com sucesso"
+      ],
+      "raw": {
+        "Rule": "CalculatorOccupationRule",
+        "Logs": [
+          "Regra CalculatorOccupationRule executada com sucesso"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    },
+    {
+      "sequence": 1,
+      "rule": "DetachedUnitRule",
+      "type": "common",
+      "registers": null,
+      "start_date": "2026-04-14T00:53:21.439073",
+      "end_date": "2026-04-14T00:53:21.439416",
+      "executed": false,
+      "mounted_spaces": [],
+      "logs": [
+        "Nenhum item com quantidade avulsa encontrado. Regra nao sera executada.",
+        "Regra DetachedUnitRule não executada!"
+      ],
+      "raw": {
+        "Rule": "DetachedUnitRule",
+        "Logs": [
+          "Nenhum item com quantidade avulsa encontrado. Regra nao sera executada.",
+          "Regra DetachedUnitRule não executada!"
+        ],
+        "Children": [],
+        "Debug": null
+      }
+    }
+  ]
+}

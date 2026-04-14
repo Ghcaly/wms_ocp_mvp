@@ -3,13 +3,13 @@ import logging
 
 from ...domain.base_rule import BaseRule
 from ...domain.context import Context
-from ...factories.route_rule_factories import RouteRuleFactories
+from ...factories.route_rule_principal_factories import RouteRulePrincipalFactories
 
 
 class ASRouteRule(BaseRule):
     def __init__(self):
         super().__init__()
-        self.route_rules_chain = RouteRuleFactories().create_route_chain()
+        self.route_rules_chain = RouteRulePrincipalFactories().create_principal_route_chain()
         self.logger = logging.getLogger(__name__)
 
     def execute(self, context: Context) -> Context:

@@ -2,7 +2,7 @@ from decimal import Decimal
 from typing import Optional
 
 from ...domain.space_size import SpaceSize
-
+from ...domain.space_list import SpaceList
 from ...domain.itemList import ItemList
 from ...domain.base_rule import BaseRule
 
@@ -22,7 +22,7 @@ class BulkPalletRule(BaseRule):
         filtered = ItemList(context.get_items()).matching(item_predicate).not_chopp().not_marketplace()\
             .with_amount_remaining()
         
-        filtered = context.domain_operations.ordered_by(filtered, fields=[('amount', 'desc')])
+        filtered = context.domain_operations.ordered_by(filtered, fields=["priority", ('amount', 'desc')])
         # items = list(context.get_items() or [])
 
         context.add_execution_log(f"BulkPalletRule: processing {len(filtered)} items (post-filter)")
@@ -32,11 +32,8 @@ class BulkPalletRule(BaseRule):
             # context.add_execution_log(f"BulkPalletRule: qty_per_pallet for {getattr(item, 'code', '')}: {qty_per_pallet}")
 
             # iterate configured spaces (empty bays) ordered by size desc then number asc
-            bays = context.GetEmptySpaces()
-            bays = context.domain_operations.ordered_by(
-                        bays, 
-                        fields=[('size', 'desc'), ('number', 'asc')]
-                    )
+            # mirrors C#: context.GetEmptySpaces().OrderedBySizeAndNumber()
+            bays = SpaceList(context.GetEmptySpaces()).ordered_by_size_and_number()
 
             # context.add_execution_log(f"Numero de baias do caminhao: {len(list(bays))}")
 
@@ -48,7 +45,8 @@ class BulkPalletRule(BaseRule):
         #     )
 
     def _get_bulk_quantity(self, item, factor):
-        if factor.HasQuantity and item.amount_remaining  >= factor.Quantity:
+        # mirrors C#: factor.Quantity.HasValue && item.AmountRemaining >= factor.Quantity
+        if factor.Quantity is not None and item.amount_remaining >= factor.Quantity:
             return int(factor.Quantity)
         return None
 
@@ -58,10 +56,9 @@ class BulkPalletRule(BaseRule):
         Port do método AddBulkPallet do C#.
         """
         try:
-            # Busca o fator correspondente ao tamanho da baia
+            # mirrors C#: item.Product.Factors.First(x => x.Size == bay.Size)
             factor = item.Product.GetFactor(bay.Size)
-        except ValueError:
-            # Não encontrou fator para este tamanho de baia
+        except (ValueError, StopIteration):
             return
         
         # Calcula quantidade bulk

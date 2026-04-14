@@ -159,7 +159,8 @@ class ConfigGenerator:
     def load_warehouse_config_from_csv(
         self,
         unb_code: str,
-        delivery_date: Optional[str] = None
+        delivery_date: Optional[str] = None,
+        map_type: Optional[int] = None
     ) -> Dict[str, Any]:
         """
         Carrega configurações completas do warehouse a partir dos CSVs
@@ -250,7 +251,7 @@ class ConfigGenerator:
                         # else:
                         #     self.logger.warning("Usando default CombinedGroups (WarehouseId não encontrado)")
                         
-                        result = build_settings_for_unb_code(unb_code)
+                        result = build_settings_for_unb_code(unb_code, map_type=map_type)
 
                         settings["EnableSafeSideRule"] = str(
                             result.get("EnableSafeSideRule", "True" if row.get('EnableSafeSideRule') == '1' else "False")
@@ -347,7 +348,7 @@ class ConfigGenerator:
                             )
                         )
                         settings["SideBalanceRule"] = str(
-                            result.get("sideBalanceRule", False)
+                            result.get("sideBalanceRule", settings.get("SideBalanceRule", "True"))
                         )
                         settings["PalletizeDetached"] = str(
                             result.get("PalletizeDetached", settings.get("PalletizeDetached"))
@@ -790,7 +791,10 @@ class ConfigGenerator:
             if unb_code:
                 unb_code = self.apply_warehouse_depara(unb_code)
                 self.logger.info(f"UnbCode encontrado: {unb_code}")
-                config["Settings"] = self.load_warehouse_config_from_csv(unb_code, delivery_date)
+                # Map kind string to numeric MapType used in ruleconfiguration CSV
+                kind_to_map_type = {"Route": 1, "AS": 2, "CrossDocking": 3, "Mixed": 4, "T4": 5}
+                numeric_map_type = kind_to_map_type.get(config.get("Type"), None)
+                config["Settings"] = self.load_warehouse_config_from_csv(unb_code, delivery_date, map_type=numeric_map_type)
                 # config["Settings_Nonv"] = build_settings_for_unb_code(unb_code)
             else:
                 self.logger.warning("UnbCode não encontrado no JSON, usando Settings padrão")

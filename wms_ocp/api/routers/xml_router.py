@@ -47,8 +47,25 @@ async def process_xml(file: UploadFile = File(...), _logger=Depends(request_logg
             status_code=500,
             detail=f"Erro ao processar o XML: {str(e)}"
         )
-    return {
+
+    if result and result.get('success') is False:
+        raise HTTPException(status_code=500, detail=result.get('error', 'Erro desconhecido'))
+
+    # Build response from JSON output file
+    import json as _json
+    from pathlib import Path as _Path
+    data_dir = _Path(__file__).parent.parent.parent / "data"
+    ctx = result.get('context') if result else None
+    map_number = getattr(ctx, 'MapNumber', None) if ctx else None
+    palletize_json = None
+    if map_number:
+        json_path = data_dir / f"palletize_result_map_{map_number}.json"
+        if json_path.exists():
+            with open(json_path, encoding='utf-8') as f:
+                palletize_json = _json.load(f)
+
+    return palletize_json or {
         "filename": file.filename,
         "bytes": len(content),
-        "message": "XML válido"
+        "message": "Paletização concluída"
     }

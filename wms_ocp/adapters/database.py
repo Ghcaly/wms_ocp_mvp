@@ -143,15 +143,13 @@ def extrair_codigo_tipo(descricao: str) -> int:
 def create_product(item_dto) -> Product:
     """
     Cria o produto apropriado baseado nos atributos
-    
+
     Args:
         item_dto: Dados do item
-        is_marketplace: Se True, retorna Package para marketplace
-    
+
     Returns:
         Instância de Product apropriada
     """
-    # Caso contrário, segue lógica normal
     if getattr(item_dto, 'Barril', False):#Keg
         return Chopp()
     elif getattr(item_dto, 'Retornável', False):#Returnable
@@ -159,7 +157,10 @@ def create_product(item_dto) -> Product:
     elif getattr(item_dto, 'Água/Isotônico', False):
         return IsotonicWater()
     else:
-        # Default: Disposable
+        # Market/Package items have a non-empty Tipo Caixa (e.g. "Garrafeira", "Caixa vazada")
+        tipo_caixa = getattr(item_dto, 'Tipo Caixa', None)
+        if isinstance(tipo_caixa, str) and tipo_caixa.strip():
+            return Package()
         return DisposableProduct()
 
 
@@ -250,7 +251,19 @@ def fill_item_from_row(item, combined_groups, support_point, row):
         item_marketplace = ItemMarketplace.from_row_values(raw_box_type, raw_units_per_box)
         item_marketplace.item = item.Code
         item.Product.ItemMarketplace = item_marketplace
-    
+
+        # For Package items (Garrafeira/Caixa vazada), set UnitsPerBox so PackageRule can place them.
+        # Formula: min(csv_units or 1, amount) — places all available units in the fewest batches possible
+        # without exceeding the box capacity from the catalog.
+        if isinstance(item.Product, Package):
+            csv_units = item_marketplace.units_per_box  # may be None if "Quantidade de unidades por caixa" is empty
+            amount = int(getattr(item, 'Amount', 0) or 0)
+            if amount > 0:
+                units_per_box = int(min(csv_units or 1, amount))
+            else:
+                units_per_box = int(csv_units or 1)
+            item.Product.UnitsPerBox = units_per_box
+
     return item
 
 def enrich_items(items_list, combined_groups, support_point, df):

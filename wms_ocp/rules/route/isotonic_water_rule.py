@@ -72,10 +72,8 @@ class IsotonicWaterRule(BaseRule):
 
 			candidate = MountedSpaceList(context.MountedSpaces).HasSpaceAndNotBlocked().WithSameType(ContainerType.DISPOSABLE).OrderByLayerOccupationAndDifference(item.Product)\
 			 .FirstOrDefault()
-
-			if candidate is not None:
-				space = candidate.Space
-				self._add_product(context, space, item)
+			space = candidate.Space if candidate is not None else None
+			self._add_product(context, space, item)
 
 			self._add_product_on_base_type_space(context, item, ContainerType.DISPOSABLE)
 			self._add_product_on_base_type_space(context, item, ContainerType.RETURNABLE, filter_remount=True)
@@ -107,8 +105,7 @@ class IsotonicWaterRule(BaseRule):
 				self._add_product(context, chopp.Space, item)
 
 			container_type = ContainerType.RETURNABLE if item.IsReturnable() else ContainerType.DISPOSABLE
-			predicate = lambda ms, ct=container_type: any(c.ProductBase.ContainerType == ct for c in ms.Containers)
-			best_space = MountedSpaceList(context.MountedSpaces).HasSpaceAndNotBlocked().matching(predicate).OrderByLayerRemountDescAndOccupation().FirstOrDefault()
+			best_space = MountedSpaceList(context.MountedSpaces).HasSpaceAndNotBlocked().WithSameType(container_type).OrderByLayerRemountDescAndOccupation().FirstOrDefault()
 			self._add_product_on_base_type_space_with_less_occupation(context, item, best_space, ContainerType.DISPOSABLE)
 
 	# ---- helpers (direct calls, no defensive guards) ----

@@ -18,7 +18,6 @@ class SideBalanceRule(BaseRule):
         super().__init__(name='SideBalanceRule')
 
     def should_execute(self, context: Context) -> bool:
-        # return False
         if not context.get_setting('SideBalanceRule', False):
             context.add_execution_log('Regra desativada, nao sera executada')
             return False
@@ -30,173 +29,176 @@ class SideBalanceRule(BaseRule):
     def execute(self, context: Context) -> Context:
         context.add_execution_log('Iniciando execucao da regra')
 
-        # Faithful port of C# SideBalanceRule flow
         percentage = self._get_percentage_weight_of_driver_side(context)
-        context.add_execution_log(f'Inicio do balanceamento - Lado Motorista: {percentage:.2f}% - Lado Ajudante: {100.0 - percentage:.2f}%')
-        # context.add_execution_log(self._get_pallet_weight_log_message(context))
+        context.add_execution_log(
+            f'Inicio do balanceamento - Lado Motorista: {percentage:.2f}% - Lado Ajudante: {100.0 - percentage:.2f}%'
+        )
+        context.add_execution_log(self._get_pallet_weight_log_message(context))
 
-        # Order mounted spaces by weight descending and run SideBalance
-        try:
-            mounted_spaces = MountedSpaceList(context.MountedSpaces).OrderByWeightDesc()
-        except Exception as e:
-            print(f"Error:: {e}")
-            # fallback to simple sort if C#-style helper not present
-            mounted_spaces = sorted(getattr(context, 'mounted_spaces', []) or [], key=lambda x: getattr(x, 'weight', 0), reverse=True)
-
+        mounted_spaces = MountedSpaceList(context.MountedSpaces).OrderByWeightDesc()
         self._side_balance(context, mounted_spaces)
 
-        ##teste  pode deletar depois
-        percentage = self._get_percentage_weight_of_driver_side(context)
-        context.add_execution_log(f'Inicio do balanceamento - Lado Motorista: {percentage:.2f}% - Lado Ajudante: {100.0 - percentage:.2f}%')
-        ##teste 
-        # Ensure driver side weight is greater if helper side heavier (C# behavior)
         self._ensure_driver_side_weight_is_greater(context)
 
         percentage = self._get_percentage_weight_of_driver_side(context)
-        context.add_execution_log(f'Fim do balanceamento - Lado Motorista: {percentage:.2f}% - Lado Ajudante: {100.0 - percentage:.2f}%')
-        # context.add_execution_log(self._get_pallet_weight_log_message(context))
+        context.add_execution_log(
+            f'Fim do balanceamento - Lado Motorista: {percentage:.2f}% - Lado Ajudante: {100.0 - percentage:.2f}%'
+        )
+        context.add_execution_log(self._get_pallet_weight_log_message(context))
 
         return context
 
     def _side_balance(self, context: Context, mounted_spaces):
+        """
+        Port fiel do C# SideBalance:
+        Para cada mounted space (ordem decrescente de peso),
+        encontra o primeiro space não balanceado que caiba o conteúdo,
+        e troca os espaços.
+        """
         for mounted_space in mounted_spaces:
             is_driver_side = self._is_driver_side(context)
             target_space = self._get_first_space_not_balanced(context, mounted_space, is_driver_side)
-            if not target_space:
-                context.add_execution_log(f'Nenhuma baia encontrada para balancear os produtos da Baia:{getattr(mounted_space.Space if hasattr(mounted_space, "Space") else mounted_space, "side", "?")}/{getattr(mounted_space.Space if hasattr(mounted_space, "Space") else mounted_space, "number", "?")} - Peso:{getattr(mounted_space, "weight", 0):.2f}')
+            if target_space is None:
+                side_str = getattr(getattr(mounted_space, 'Space', mounted_space), 'Side',
+                                   getattr(getattr(mounted_space, 'space', None), 'side', '?'))
+                num_str = getattr(getattr(mounted_space, 'Space', mounted_space), 'Number',
+                                  getattr(getattr(mounted_space, 'space', None), 'number', '?'))
+                weight = getattr(mounted_space, 'weight', 0)
+                context.add_execution_log(
+                    f'Nenhuma baia encontrada para balancear os produtos da Baia:{side_str}/{num_str} - Peso:{weight:.2f}'
+                )
                 continue
 
             target_mounted_space = context.get_mounted_space(target_space)
 
-            if not target_mounted_space or self._get_mounted_space_occupation(target_mounted_space, mounted_space.space.size, context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)) <= mounted_space.space.size:
+            if (target_mounted_space is None or
+                    self._get_mounted_space_occupation(
+                        target_mounted_space, mounted_space.space.size,
+                        context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)
+                    ) <= mounted_space.space.size):
                 self._switch_spaces_and_set_balanced(context, mounted_space, target_space)
             else:
                 self._search_new_space_to_switch(context, mounted_space, target_mounted_space, target_space, is_driver_side)
 
     def _is_driver_side(self, context: Context) -> bool:
+        """
+        C#: driverBalancedWeight <= helperBalancedWeight
+        """
         try:
-            driver = sum(x.weight for x in MountedSpaceList(context.GetMountedSpacesBalanced()).DriverSide())
-            helper = sum(x.weight for x in MountedSpaceList(context.GetMountedSpacesBalanced()).HelperSide())
+            balanced = context.GetMountedSpacesBalanced()
+            driver = sum(x.weight for x in MountedSpaceList(balanced).DriverSide())
+            helper = sum(x.weight for x in MountedSpaceList(balanced).HelperSide())
             return driver <= helper
         except Exception as e:
             print("Error determining driver side:", e)
-            # fallback: compute using simple sums
-            driver = sum(getattr(ms, 'weight', 0) for ms in getattr(context, 'mounted_spaces', []) or [] if getattr(getattr(ms, 'space', None), 'side', '').strip().lower().startswith('d'))
-            helper = sum(getattr(ms, 'weight', 0) for ms in getattr(context, 'mounted_spaces', []) or [] if not getattr(getattr(ms, 'space', None), 'side', '').strip().lower().startswith('d'))
-            return driver <= helper
+            return True
 
     def _get_first_space_not_balanced(self, context, mounted_space, is_driver_side):
-        # 1. pegar todos os spaces
-        spaces = context.get_all_spaces()
-
-        # 2. NotBalanced() filtrado (assumindo que existe esse método)
+        """
+        C#:
+        context.GetAllSpaces()
+               .NotBalanced()
+               .Where(x => x.Size >= GetMountedSpaceOccupation(mountedSpace, x.Size, ...))
+               .OrderByDescending(x => x.IsDriverSide() == isDriverSide)
+               .ThenBy(x => x.Number)
+               .FirstOrDefault()
+        """
         spaces = SpaceList(context.GetAllSpaces()).NotBalanced().spaces
-
-        # 3. aplicar o filtro do tamanho
         spaces = [
             s for s in spaces
             if float(s.size) >= self._get_mounted_space_occupation(
-                mounted_space,
-                s.size,
+                mounted_space, s.size,
                 context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)
             )
         ]
-        # 4. ordenar por IsDriverSide DESC, Number ASC
         spaces_sorted = sorted(
             spaces,
             key=lambda s: (
-                -(s.is_driver_side() == is_driver_side),  # DESC
-                s.number                                 # ASC
+                -(s.is_driver_side() == is_driver_side),  # DESC: matching side first
+                s.number                                   # ASC
             )
         )
-
-        # 5. retornar o primeiro ou None
         return spaces_sorted[0] if spaces_sorted else None
 
-
-    # def _get_first_space_not_balanced(self, context: Context, mounted_space, is_driver_side):
-    #     try:
-    #         spaces = SpaceList(context.GetAllSpaces()).NotBalanced().matching(lambda x: x.Size >= self._get_mounted_space_occupation(mounted_space, x.Size, context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)))
-    #         ordered = spaces.OrderByDescending(lambda x: x.IsDriverSide() == is_driver_side).ThenBy(lambda x: x.Number)
-    #         return ordered.FirstOrDefault()
-    #     except Exception as e:
-    #         print(f"Error:: {e}")
-    #         # fallback: simple scan 
-    #         candidates = [s for s in getattr(context, 'spaces', []) or [] if getattr(s, 'size', 0) >= self._get_mounted_space_occupation(mounted_space, getattr(s, 'size', 0), context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)) and not getattr(s, 'balanced', False)]
-    #         candidates.sort(key=lambda x: (1 if getattr(x, 'side', '').strip().lower().startswith('d') == is_driver_side else 0, getattr(x, 'number', 0)), reverse=True)
-    #         return candidates[0] if candidates else None
-
     def _switch_spaces_and_set_balanced(self, context: Context, mounted_space, target_space):
-        # find mounted space instances
+        """
+        C#: SwitchSpacesAndSetBalanced
+        """
         target_mounted_space = context.get_mounted_space(target_space)
 
-        is_different = mounted_space.Space.Number != target_space.Number or (mounted_space.Space.Side != target_space.Side)
+        is_different = (mounted_space.Space.Number != target_space.Number or
+                        mounted_space.Space.Side != target_space.Side)
         if is_different:
-            context.add_execution_log(f'Movendo os produtos da Baia:{mounted_space.Space.Side}/{mounted_space.Space.Number} para a Baia:{target_space.Side}/{target_space.Number}')
-            try:
-                # pass the actual MountedSpace instances so domain operations mutates context state
-                context.domain_operations.switch_spaces(context, mounted_space, target_mounted_space, target_space)
-                # if target_mounted_space is None:
-                target_mounted_space = context.get_mounted_space(target_space)
-            except Exception:
-                # fallback: try passing mounted spaces directly if signature differs
-                try:
-                    context.domain_operations.switch_spaces(mounted_space, target_mounted_space)
-                except Exception:
-                    pass
+            context.add_execution_log(
+                f'Movendo os produtos da Baia:{mounted_space.Space.Side}/{mounted_space.Space.Number} '
+                f'para a Baia:{target_space.Side}/{target_space.Number}'
+            )
+            current_dto = SpaceWithMountedSpaceDto(Space=mounted_space.Space, MountedSpace=mounted_space)
+            target_dto = SpaceWithMountedSpaceDto(Space=target_space, MountedSpace=context.get_mounted_space(target_space))
+            context.domain_operations.switch_spaces(context, current_dto, target_dto)
+            target_mounted_space = context.get_mounted_space(target_space)
+
         self._recalculate_mounted_space_occupation(context, target_mounted_space)
         self._adjust_closed_pallet(context, target_mounted_space)
 
         try:
             target_space.SetBalanced()
-        except Exception as e:
-            print(f"Error:: {e}")
-            try:
-                target_space.set_balanced()
-            except Exception as e:
-                print(f"Error:: {e}")
-                pass
-
-    def _switch_spaces(self, context: Context, space, target_space):
-        current_ms = context.get_mounted_space(space)
-        target_ms = context.get_mounted_space(target_space)
-        context.add_execution_log(f'Movendo os produtos da Baia:{space.Side}/{space.Number} para a Baia:{target_space.Side}/{target_space.Number}')
-        try:
-            context.domain_operations.switch_spaces(context, current_ms, target_ms, target_space)
         except Exception:
             try:
-                context.domain_operations.switch_spaces(current_ms, target_ms)
+                target_space.set_balanced()
             except Exception:
                 pass
 
-    def _ensure_driver_side_weight_is_greater(self, context: Context):
-        # driver = sum(getattr(ms, 'weight', 0) for ms in getattr(context, 'mounted_spaces', []) or [] if getattr(getattr(ms, 'space', None), 'side', '').strip().lower().startswith('d'))
-        # helper = sum(getattr(ms, 'weight', 0) for ms in getattr(context, 'mounted_spaces', []) or [] if not getattr(getattr(ms, 'space', None), 'side', '').strip().lower().startswith('d'))
+    def _switch_spaces(self, context: Context, space, target_space):
+        """
+        C#: SwitchSpaces (helper that logs and calls operations)
+        """
+        current_ms = context.get_mounted_space(space)
+        target_ms = context.get_mounted_space(target_space)
+        context.add_execution_log(
+            f'Movendo os produtos da Baia:{space.Side}/{space.Number} '
+            f'para a Baia:{target_space.Side}/{target_space.Number}'
+        )
+        current_dto = SpaceWithMountedSpaceDto(Space=space, MountedSpace=current_ms)
+        target_dto = SpaceWithMountedSpaceDto(Space=target_space, MountedSpace=target_ms)
+        context.domain_operations.switch_spaces(context, current_dto, target_dto)
 
-        driver = sum(x.weight for x in MountedSpaceList(context.mounted_spaces).DriverSide())
-        helper = sum(x.weight for x in MountedSpaceList(context.mounted_spaces).HelperSide())
-        
+    def _ensure_driver_side_weight_is_greater(self, context: Context):
+        """
+        Port fiel do C# EnsureDriverSideWeightIsGreater.
+        Se ajudante > motorista: itera TODOS os helper spaces em ordem crescente de número
+        e troca cada um com o driver space correspondente (mesmo número).
+        Não há break antecipado — todos os pares são trocados.
+        """
+        driver = sum(x.weight for x in MountedSpaceList(context.MountedSpaces).DriverSide())
+        helper = sum(x.weight for x in MountedSpaceList(context.MountedSpaces).HelperSide())
+
         if helper > driver:
             context.add_execution_log('Lado do Ajudante com peso maior que o Lado do Motorista, invertendo as baias')
-            helper_spaces = context.domain_operations.ordered_by(SpaceList(context.GetAllSpaces()).HelperSide(), [("Number", "asc")])
-            # helper_spaces.sort(key=lambda x: getattr(x, 'number', 0))
+
+            all_spaces = context.GetAllSpaces()
+            helper_spaces = sorted(
+                [s for s in all_spaces if not s.is_driver_side()],
+                key=lambda s: s.number
+            )
+
             for helper_space in helper_spaces:
-                current = SpaceWithMountedSpaceDto(helper_space, context.get_mounted_space(helper_space))
-                # target = next((x for x in getattr(context, 'spaces', []) or [] if getattr(x, 'side', '').strip().lower().startswith('d') and getattr(x, 'number', None) == getattr(helper_space, 'number', None)), None)
-                target = SpaceList(context.GetAllSpaces()).DriverSide().getSpaceByNumber(helper_space.number)
-                if not target:
+                target_space = next(
+                    (s for s in all_spaces if s.is_driver_side() and s.number == helper_space.number),
+                    None
+                )
+                if target_space is None:
                     continue
-                target_ms = context.get_mounted_space(target)
+
                 current_ms = context.get_mounted_space(helper_space)
-                try:
-                    context.domain_operations.switch_spaces(context, current_ms, target_ms, target)
-                except Exception as e:
-                    print(f"Error:: {e}")
-                    try:
-                        context.domain_operations.switch_spaces(current_ms, target_ms)
-                    except Exception as e:
-                        print(f"Error:: {e}")
-                        pass
+                target_ms = context.get_mounted_space(target_space)
+                current_dto = SpaceWithMountedSpaceDto(Space=helper_space, MountedSpace=current_ms)
+                target_dto = SpaceWithMountedSpaceDto(Space=target_space, MountedSpace=target_ms)
+                context.domain_operations.switch_spaces(context, current_dto, target_dto)
+                context.add_execution_log(
+                    f'Invertendo Baia:{helper_space.Side}/{helper_space.number} '
+                    f'com Baia:{target_space.Side}/{target_space.number}'
+                )
 
     def _search_new_space_to_switch(self, context: Context, mounted_space, target_mounted_space, target_space, is_driver_side):
         if self._try_switch_target_mounted_space_to_empty_space(context, mounted_space, target_mounted_space, target_space, is_driver_side):
@@ -206,7 +208,16 @@ class SideBalanceRule(BaseRule):
         self._find_new_space_with_same_size_spaces(context, mounted_space, is_driver_side)
 
     def _try_switch_target_mounted_space_to_empty_space(self, context: Context, mounted_space, target_mounted_space, target_space, is_driver_side):
-        available = [s for s in getattr(context, 'spaces', []) or [] if getattr(s, 'size', 0) >= self._get_mounted_space_occupation(target_mounted_space, getattr(s, 'size', 0), context.get_setting('OccupationAdjustmentToPreventExcessHeight', False))]
+        """
+        C#: context.Spaces.Where(x => x.Size >= GetMountedSpaceOccupation(targetMountedSpace, x.Size, ...))
+        """
+        available = [
+            s for s in getattr(context, 'spaces', []) or []
+            if float(s.size) >= self._get_mounted_space_occupation(
+                target_mounted_space, s.size,
+                context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)
+            )
+        ]
         if available:
             space_to_switch = self._find_best_space_to_switch(available, is_driver_side)
             self._switch_spaces(context, target_space, space_to_switch)
@@ -215,13 +226,24 @@ class SideBalanceRule(BaseRule):
         return False
 
     def _try_switch_target_space_to_another_mounted_space(self, context: Context, mounted_space, target_mounted_space, target_space, is_driver_side):
+        """
+        C#: context.MountedSpaces.Where(...).Select(x => x.Space).NotBalanced()
+        """
         candidates = []
         for x in getattr(context, 'mounted_spaces', []) or []:
             if x.Space != mounted_space.Space and x.Space != target_space:
-                if self._get_mounted_space_occupation(x, mounted_space.space.size, context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)) <= mounted_space.space.size and getattr(x.Space, 'size', 0) >= self._get_mounted_space_occupation(target_mounted_space, getattr(x.Space, 'size', 0), context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)):
+                occ_in_ms_size = self._get_mounted_space_occupation(
+                    x, mounted_space.space.size,
+                    context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)
+                )
+                occ_target_in_x_size = self._get_mounted_space_occupation(
+                    target_mounted_space, x.Space.size,
+                    context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)
+                )
+                if occ_in_ms_size <= mounted_space.space.size and x.Space.size >= occ_target_in_x_size:
                     candidates.append(x.Space)
 
-        candidates = [s for s in candidates if not getattr(s, 'balanced', False)]
+        candidates = SpaceList(candidates).NotBalanced().spaces
         if candidates:
             space_to_switch = self._find_best_space_to_switch(candidates, is_driver_side)
             self._switch_spaces(context, target_space, space_to_switch)
@@ -230,8 +252,9 @@ class SideBalanceRule(BaseRule):
         return False
 
     def _find_new_space_with_same_size_spaces(self, context: Context, mounted_space, is_driver_side):
-        # same_size = [s for s in getattr(context, 'spaces', []) or [] if getattr(s, 'size', None) == mounted_space.space.size and not getattr(s, 'balanced', False)]
-        # same_size = SpaceList(context.GetAllSpaces()).matching(lambda x: x.size == mounted_space.space.size).NotBalanced()
+        """
+        C#: context.GetAllSpaces().Where(space => space.Size == mountedSpace.Space.Size).NotBalanced()
+        """
         same_size = (
             SpaceList(context.GetAllSpaces())
             .matching(lambda x: x.size == mounted_space.space.size)
@@ -242,21 +265,28 @@ class SideBalanceRule(BaseRule):
             self._switch_spaces_and_set_balanced(context, mounted_space, new_target)
 
     def _find_best_space_to_switch(self, spaces, is_driver_side):
-        # Order by driver-side preference then by number
+        """
+        C#: OrderByDescending(space => space.IsDriverSide() == isDriverSide).ThenBy(space => space.Number).FirstOrDefault()
+        """
         try:
-            return SpaceList(spaces).OrderByDescending(lambda space: space.IsDriverSide() == is_driver_side).ThenBy(lambda space: space.Number).FirstOrDefault()
-            # ordered = sorted(spaces, key=lambda sp: (not getattr(sp, 'is_driver_side', lambda: False)() if callable(getattr(sp, 'is_driver_side', None)) else 0, getattr(sp, 'number', 0)), reverse=True)
-            # return ordered[0] if ordered else None
+            return SpaceList(spaces).OrderByDescending(
+                lambda space: space.IsDriverSide() == is_driver_side
+            ).ThenBy(lambda space: space.Number).FirstOrDefault()
         except Exception as e:
-            print(f"Error:: {e}")
+            print(f"Error finding best space: {e}")
             return spaces[0] if spaces else None
 
     def _get_mounted_space_occupation(self, mounted_space, size, calculate_additional_occupation):
+        """
+        C#: if same size → return Occupation; else use FactorConverter
+        """
         try:
             if mounted_space.space.size == size:
                 return mounted_space.Occupation
 
-            # emulate C#: use factor converter
+            calculate_additional_occupation = (
+                not mounted_space.GetFirstPallet().Bulk and calculate_additional_occupation
+            )
             from ...domain.factor_converter import FactorConverter
             fc = FactorConverter()
             mounted_products = mounted_space.GetProducts()
@@ -266,68 +296,91 @@ class SideBalanceRule(BaseRule):
                 total += float(occ)
             return total
         except Exception as e:
-            print(f"Error:: {e}")
+            print(f"Error getting mounted space occupation: {e}")
             return getattr(mounted_space, 'occupation', 0)
 
     def _get_percentage_weight_of_driver_side(self, context: Context) -> float:
         """
-        Faithful port of C# GetPercentageWeightOfDriverSide:
-        driverWeight * 100 / totalWeight
+        C#: driverSideWeight * 100 / totalWeight
         """
-        # call the context API directly (faithful to C# style)
         total_weight = sum(ms.weight for ms in context.mounted_spaces)
         driver_weight = sum(ms.weight for ms in MountedSpaceList(context.mounted_spaces).DriverSide())
         return float((driver_weight * 100 / total_weight) if total_weight != 0 else 0.0)
 
     def _recalculate_mounted_space_occupation(self, context: Context, mounted_space):
+        """
+        C#: RecalculeMountedSpaceOccupation
+        """
         try:
             old = mounted_space.occupation
             mounted_space.SetOccupation(0)
             for mp in mounted_space.get_products():
                 try:
                     mp.Item.SetAdditionalOccupation(0)
-                except Exception as e:
-                    print("Error setting AdditionalOccupation:", e)
+                except Exception:
                     pass
-                occ = self._get_product_total_occupation(mounted_space, mp, context.get_setting('OccupationAdjustmentToPreventExcessHeight', False))
+                occ = self._get_product_total_occupation(
+                    mounted_space, mp,
+                    context.get_setting('OccupationAdjustmentToPreventExcessHeight', False)
+                )
                 mountedProductOccupation = occ - mp.Item.AdditionalOccupation
                 mp.SetOccupation(mountedProductOccupation)
                 mounted_space.IncreaseOccupation(occ)
-            context.add_execution_log(f'Recalculado ocupação da Baia:{getattr(mounted_space.space, "Side", "?")}/{getattr(mounted_space.space, "Number", "?")} - Antes:{old:.2f} - Depois:{getattr(mounted_space, "Occupation", 0):.2f}')
+            context.add_execution_log(
+                f'Recalculado ocupação da Baia:{getattr(mounted_space.space, "Side", "?")}/{getattr(mounted_space.space, "Number", "?")} '
+                f'- Antes:{old:.2f} - Depois:{getattr(mounted_space, "Occupation", 0):.2f}'
+            )
         except Exception as e:
             print("Error recalculating mounted space occupation:", e)
-            pass
 
     def _get_product_total_occupation(self, mounted_space, mounted_product, calculate_additional_occupation):
+        """
+        C#: GetProductTotalOccupation
+        """
         try:
             if mounted_space.GetFirstPallet().Bulk:
                 return float(mounted_space.space.size)
-            # get factor from product
-            # factor = mounted_product.Product.Factors.FirstOrDefault(lambda f: f.Size == mounted_space.space.size)
-            # factor = next((f for f in mounted_product.Product.factors if f.size == mounted_space.space.size), None)
-            factor = mounted_product.Product.get_factor(mounted_space.space.size) 
+            factor = mounted_product.Product.get_factor(mounted_space.space.size)
             from ...domain.factor_converter import FactorConverter
             fc = FactorConverter()
-            return fc.occupation(getattr(mounted_product, 'Amount', getattr(mounted_product, 'amount', 0)), factor, mounted_product.Product.PalletSetting, mounted_product.Item, calculate_additional_occupation)
+            return fc.occupation(
+                getattr(mounted_product, 'Amount', getattr(mounted_product, 'amount', 0)),
+                factor,
+                mounted_product.Product.PalletSetting,
+                mounted_product.Item,
+                calculate_additional_occupation
+            )
         except Exception as e:
-            print(f"Error:: {e}")
+            print(f"Error getting product total occupation: {e}")
             return 0
 
     def _adjust_closed_pallet(self, context: Context, mounted_space):
+        """
+        C#: AdjusteClosedPallet
+        """
         try:
             old = mounted_space.GetFirstPallet().Bulk
             if mounted_space.GetFirstPallet().Bulk and mounted_space.space.size < SpaceSize.Size42:
                 mounted_space.GetFirstPallet().SetBulk(context.get_setting('BulkAllPallets', False))
-            context.add_execution_log(f'Recalculando palete fechado da Baia:{getattr(mounted_space.Space, "Side", "?")}/{getattr(mounted_space.Space, "Number", "?")} - Antes: {old} - Depois: {mounted_space.GetFirstPallet().Bulk}')
+            context.add_execution_log(
+                f'Recalculando palete fechado da Baia:{getattr(mounted_space.Space, "Side", "?")}/{getattr(mounted_space.Space, "Number", "?")} '
+                f'- Antes: {old} - Depois: {mounted_space.GetFirstPallet().Bulk}'
+            )
         except Exception as e:
-            print(f"Error:: {e}")
-            pass
+            print(f"Error adjusting closed pallet: {e}")
 
     def _get_pallet_weight_log_message(self, context: Context) -> str:
+        """
+        C#: GetPalletWeightLogMessage — ordered by Space.Number
+        """
         parts = []
-        for ms in sorted(getattr(context, 'mounted_spaces', []) or [], key=lambda x: getattr(x.Space if hasattr(x, 'Space') else x, 'Number', 0)):
-            side = getattr(ms.Space if hasattr(ms, 'Space') else ms, 'Side', getattr(ms, 'space', {}).get('side', '?'))
-            number = getattr(ms.Space if hasattr(ms, 'Space') else ms, 'Number', getattr(ms, 'space', {}).get('number', '?'))
+        for ms in sorted(getattr(context, 'mounted_spaces', []) or [],
+                         key=lambda x: getattr(getattr(x, 'Space', x), 'Number',
+                                               getattr(getattr(x, 'space', None), 'number', 0))):
+            side = getattr(getattr(ms, 'Space', ms), 'Side',
+                           getattr(getattr(ms, 'space', None), 'side', '?'))
+            number = getattr(getattr(ms, 'Space', ms), 'Number',
+                             getattr(getattr(ms, 'space', None), 'number', '?'))
             weight = getattr(ms, 'Weight', getattr(ms, 'weight', 0)) or 0
             parts.append(f"{side}/{number} weight: {weight:.2f}")
         return '; '.join(parts)

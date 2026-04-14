@@ -418,20 +418,39 @@ def GetBoxes(
         
         # Processa SKUs e adiciona ItemsInBox (equivalente linha 313-315)
         all_items_in_box = []
+        total_content_weight = 0.0
         for sku in skus:
             sku_code = _get_key(sku, "code", "Code")
             sku_qty = int(_get_key(sku, "quantity", "Quantity", default=0) or 0)
-            
+
             # AddItemsInBox para cada SKU
             items_in_box = AddItemsInBox(items_in_xml, sku_code, sku_qty)
             all_items_in_box.extend(items_in_box)
-        
+
+            # Compute content weight from items_request (mirrors legado: weight = sum of contained items)
+            for req_item in (items_request or []):
+                if str(getattr(req_item, 'Code', '')) == str(sku_code):
+                    prod = getattr(req_item, 'Product', None)
+                    gw = getattr(prod, 'GrossWeight', None) if prod else None
+                    if gw is not None:
+                        try:
+                            total_content_weight += float(gw) * sku_qty
+                        except Exception:
+                            pass
+                    break
+
         # SetItemsInBox no produto (equivalente linha 315)
         if hasattr(box_product, 'SetItemsInBox'):
             box_product.SetItemsInBox(all_items_in_box)
         else:
             box_product.ItemsInBox = all_items_in_box
-        
+
+        # Override GrossWeight with content weight (sum of contained SKU weights).
+        # Legado uses content weight for side balance (not the physical box container weight),
+        # as evidenced by the report weight matching the sum of individual item weights.
+        if total_content_weight > 0:
+            box_product.GrossWeight = total_content_weight
+
         created_boxes.append(box_context_item)
     
     return created_boxes
@@ -617,14 +636,36 @@ def BuildItems(
             except Exception:
                 delivery_orders = []
 
-        # Se não tem delivery orders definidos, adiciona na primeira order
-        # If this created item is a BoxTemplate (product has ItemsInBox), add it to the group's first order
+        # BoxTemplate: assign to the correct orders based on ItemsInBox.DeliveryOrders
         if getattr(created_item, 'Product', None) and getattr(created_item.Product, 'ItemsInBox', None):
-            if context.Orders and len(context.Orders) > 0:
-                first_order = context.Orders[0]
-                current = first_order.Items
-                if not any(created_item is existing for existing in current):
-                    first_order.SetItems(current + [created_item])
+            # Collect all delivery order numbers from the items inside the box
+            box_delivery_orders = set()
+            for item_in_box in created_item.Product.ItemsInBox:
+                for do in (getattr(item_in_box, 'DeliveryOrders', None) or []):
+                    dov = getattr(do, 'DeliveryOrder', None)
+                    if dov is not None:
+                        box_delivery_orders.add(dov)
+
+            if box_delivery_orders:
+                added = False
+                for order in context.Orders:
+                    order_delivery = getattr(order, 'DeliveryOrder', getattr(order, 'delivery_order', None))
+                    if order_delivery in box_delivery_orders:
+                        if not any(created_item is ei for ei in order.Items):
+                            if added:
+                                from copy import deepcopy
+                                order.Items.append(deepcopy(created_item))
+                            else:
+                                order.Items.append(created_item)
+                                added = True
+                if not added:
+                    # fallback: first order
+                    if context.Orders:
+                        context.Orders[0].Items.append(created_item)
+            else:
+                # no delivery info: fallback to first order
+                if context.Orders:
+                    context.Orders[0].Items.append(created_item)
             continue
 
         # Adiciona o item em TODAS as orders que correspondem aos delivery_orders

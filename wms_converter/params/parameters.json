@@ -1,0 +1,10 @@
+{
+    "boxes_file": "boxes_input.json",
+    "max_weight": 25,
+    "res_dir": "results",
+    "steps": {
+        "1": "Pacote",
+        "2": "Garrafeira",
+        "3": "Caixa"
+    }
+}

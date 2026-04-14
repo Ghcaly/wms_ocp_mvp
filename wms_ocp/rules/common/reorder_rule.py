@@ -166,7 +166,7 @@ class ReorderRule(BaseRule):
 
         # 3.1 - Group with largest quantity first
         if disposable.WithoutAssemblySequence().Any():
-            group_sub_group_disposable = disposable.OrderByAmountDesc().ToList()[0].Product.PackingGroup.GroupCode
+            group_sub_group_disposable = disposable.OrderByAmountDesc()[0].Product.PackingGroup.GroupCode
             disposable_products = MountedProductList([
                 p for p in disposable if p.Product.PackingGroup.GroupCode == group_sub_group_disposable
             ])

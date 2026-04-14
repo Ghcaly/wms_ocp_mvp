@@ -19,6 +19,9 @@ from ..rules.crossdocking import *
 from ..rules.t4 import *
 from .factor_converter import FactorConverter
 from .base_rule import BaseRule
+from ..factories.route_rule_principal_factories import RouteRulePrincipalFactories
+from ..rules.as_rules.number_of_pallets_rule import NumberOfPalletsRule
+from ..rules.as_rules.bays_needed_rule import BaysNeededRule
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +91,11 @@ class RuleFactories:
         chain = RuleChain(name=name)
         fc = self.factor_converter
         chain.add_rule(self._make_rule(MixedASRule, fc))
-        chain.add_rule(self._make_rule(MixedRouteRule, fc))
+        chain.add_rule(MixedRouteRule(
+            route_rules_factory=RouteRulePrincipalFactories(),
+            bays_needed_rule=self._make_rule(BaysNeededRule, fc),
+            number_of_pallets_rule=self._make_rule(NumberOfPalletsRule, fc),
+        ))
         chain.add_rule(self._make_rule(MixedRemountRule, fc))
         return chain
 

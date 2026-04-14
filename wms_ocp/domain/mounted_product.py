@@ -185,7 +185,10 @@ class MountedProduct:
 
     @property
     def PercentOccupationIntoDefaultPalletSize(self) -> Decimal:
-        return (Decimal(self.Amount) / Decimal(self.Product.PalletSetting.Quantity)) * Decimal(100)
+        qty = Decimal(self.Product.PalletSetting.Quantity)
+        if qty == 0:
+            return Decimal(0)
+        return (Decimal(self.Amount) / qty) * Decimal(100)
 
         
     @property

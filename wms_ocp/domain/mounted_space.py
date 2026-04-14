@@ -1,3 +1,4 @@
+from __future__ import annotations
 # ...existing code...
 from typing import List, Optional, Any
 from decimal import Decimal, ROUND_DOWN, ROUND_UP

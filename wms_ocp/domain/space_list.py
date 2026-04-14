@@ -51,11 +51,13 @@ class SpaceList:
     #     return SpaceList(sorted_spaces)
     
     def ordered_by_size_and_number(self):
+        # C# mirrors: OrderByDescending(p => (int)p.Size).ThenBy(p => p.Number)
+        # Stable sort preserves original order for equal keys (A before M within same bay number)
         sorted_spaces = sorted(
             self.spaces,
             key=lambda s: (
-                -(getattr(s, 'Size', getattr(s, 'size', 0)) or 0),  # negativo para ordem decrescente
-                getattr(s, 'Number', getattr(s, 'number', 0))        # crescente
+                -(getattr(s, 'Size', getattr(s, 'size', 0)) or 0),  # Size DESC
+                getattr(s, 'Number', getattr(s, 'number', 0)),       # Number ASC
             )
         )
         return SpaceList(sorted_spaces)
